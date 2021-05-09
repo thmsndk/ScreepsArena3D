@@ -11,6 +11,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
 using System.IO.Compression;
+using Assets.Scripts;
 
 // http://steamworks.github.io/gettingstarted/
 public class SteamScript : MonoBehaviour
@@ -38,6 +39,8 @@ public class SteamScript : MonoBehaviour
     private ArenaLastGamesResponseGame latestGame;
     private GameResponse gameResponse;
 
+    private ReplayDataProvider replayDataProvider = new ReplayDataProvider();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,6 +48,29 @@ public class SteamScript : MonoBehaviour
         {
             string name = SteamFriends.GetPersonaName();
             Debug.Log(name);
+        }
+
+        var response = replayDataProvider.GetReplayChunk(0);
+
+        // initialize room, gameTime 0
+        foreach (var tick in response.Ticks)
+        {
+            var users = tick.users; // TODO: handle more than two users in the future.
+                                    //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
+            foreach (var roomObject in tick.objects)
+            {
+                var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+
+                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                if (roomObject.type == "creep")
+                {
+
+                    var creep = Instantiate(creepSpherePrefb);
+                    creep.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
+                    var renderer = creep.GetComponent<Renderer>();
+                    renderer.material.SetColor("_BaseColor", color);
+                }
+            }
         }
 
     }
@@ -121,7 +147,7 @@ public class SteamScript : MonoBehaviour
         }
         Debug.Log("[STEAM] hexEncodedTicket == " + hexEncodedTicket); // Ensure it's not empty and looks "hexy"
 
-        StartCoroutine(ScreepsArenaLogin(hexEncodedTicket));
+        //StartCoroutine(ScreepsArenaLogin(hexEncodedTicket));
 
 
     }
