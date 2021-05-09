@@ -138,9 +138,43 @@ public class SteamScript : MonoBehaviour
             Debug.Log(response);
             //string s = www.GetResponseHeader("set-cookie");
             //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
-            StartCoroutine(ScreepsArenaArenaList());
+
+            //StartCoroutine(ScreepsArenaArenaList());
+            // basic ctf id = 606873c364da921cb49855f7
+
+            // TODO: get last games from arena GET https://arena.screeps.com/api/arena/606873c364da921cb49855f7/last-games
+            // TODO: pick the latest game
+            // TODO: GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3 HTTP/1.1
+                // meta.ticks contains amount of ticks keep requesting replay and console untill chunk length does not make sense.
+                // game.terrain contains terrain
+            // TODO: `GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3/replay/0` for the initial tick `var REPlAY_CHUNK_LENGTH = 100;`
+                // TOOD: initialize all room objects
+                // TODO: start a loop getting replay chunks, perhaps a "download" ability that buffers them all and then saves to disk or something.
+            // TODO: get console `GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3/log/100` we can add this later, lets skip it in the start.
+
+            // TODO: a room player initializing all prefabs / roomobjects based on /replay/0
+                // TODO: loop each tick and handle their next state compared to their previous, e.g. movement. shooting, healing, so forth
+                // TODO: the tickrate should be able to be "controlled", stepping trough each state should be possible.
+            
+
         }
     }
+
+    /*
+     * function getReplayRangeByTick(tick, ticks) {
+        tick = tick <= 0 ? 0 : tick;
+        if (tick === 0) {
+            // Initial Replay Data;
+            return [0, 0];
+        }
+        if (tick >= ticks) {
+            tick = ticks;
+        }
+        var min = Math.floor((tick - 1) / REPlAY_CHUNK_LENGTH) * 100;
+        var max = Math.min(min + 100, ticks);
+        return [min + 1, max];
+    }
+     */
 
     private IEnumerator ScreepsArenaArenaList()
     {
