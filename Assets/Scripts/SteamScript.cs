@@ -6,10 +6,16 @@ using Steamworks;
 using System;
 using UnityEngine.Networking;
 using System.Text;
+using Assets.Scripts.Responses;
+using System.Linq;
+using Newtonsoft.Json;
+using System.IO;
+using System.IO.Compression;
 
 // http://steamworks.github.io/gettingstarted/
 public class SteamScript : MonoBehaviour
 {
+    private const string ArenaCaptureTheFlagBasic = "606873c364da921cb49855f7";
     protected Callback<GameOverlayActivated_t> m_GameOverlayActivated;
 
     private CallResult<NumberOfCurrentPlayers_t> m_NumberOfCurrentPlayers;
@@ -25,6 +31,12 @@ public class SteamScript : MonoBehaviour
 
     private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
     private CallResult<StoreAuthURLResponse_t> OnStoreAuthURLResponseCallResult;
+
+    public GameObject creepSpherePrefb = default;
+
+    private AuthLoginResponse loginResponse;
+    private ArenaLastGamesResponseGame latestGame;
+    private GameResponse gameResponse;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +76,11 @@ public class SteamScript : MonoBehaviour
 					print("Call GetAuthSessionTicket first!");
 				}
              */
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            // This is the player logic after we have fetched the entire data structure of a replay, room objects should only represent their current state
         }
     }
 
@@ -114,7 +131,7 @@ public class SteamScript : MonoBehaviour
     {
         Debug.Log("ScreepsArenaLogin");
         Debug.Log(ticket);
-        var json = "{\"ticket\":\""+ticket+"\"}";
+        var json = "{\"ticket\":\"" + ticket + "\"}";
         Debug.Log(json);
 
         var url = "https://arena.screeps.com/api/auth/login";
@@ -142,23 +159,202 @@ public class SteamScript : MonoBehaviour
             //StartCoroutine(ScreepsArenaArenaList());
             // basic ctf id = 606873c364da921cb49855f7
 
-            // TODO: get last games from arena GET https://arena.screeps.com/api/arena/606873c364da921cb49855f7/last-games
-            // TODO: pick the latest game
-            // TODO: GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3 HTTP/1.1
-                // meta.ticks contains amount of ticks keep requesting replay and console untill chunk length does not make sense.
-                // game.terrain contains terrain
-            // TODO: `GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3/replay/0` for the initial tick `var REPlAY_CHUNK_LENGTH = 100;`
-                // TOOD: initialize all room objects
-                // TODO: start a loop getting replay chunks, perhaps a "download" ability that buffers them all and then saves to disk or something.
-            // TODO: get console `GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3/log/100` we can add this later, lets skip it in the start.
+            loginResponse = JsonConvert.DeserializeObject<AuthLoginResponse>(response);
+            // use username for something, persist id as well
 
-            // TODO: a room player initializing all prefabs / roomobjects based on /replay/0
-                // TODO: loop each tick and handle their next state compared to their previous, e.g. movement. shooting, healing, so forth
-                // TODO: the tickrate should be able to be "controlled", stepping trough each state should be possible.
-            
+
+
+            // get last games from arena GET https://arena.screeps.com/api/arena/606873c364da921cb49855f7/last-games
+            StartCoroutine(GetLastGames(ArenaCaptureTheFlagBasic));
+        }
+    }
+
+    private IEnumerator GetLastGames(string arenaId)
+    {
+        Debug.Log("GetLastGames");
+        var www = UnityWebRequest.Get($"https://arena.screeps.com/api/arena/{arenaId}/last-games");
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            // https://forum.unity.com/threads/json-from-webrequest.384974/
+            string response = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+            Debug.Log(response);
+            //string s = www.GetResponseHeader("set-cookie");
+            //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
+
+            // pick the latest game
+            var latestGames = JsonConvert.DeserializeObject<ArenaLastGamesResponse>(response);
+            //var latestGames = JsonUtility.FromJson<ArenaLastGamesResponse>(response);
+            latestGame = latestGames.games[0]; // TODO: games is null? why won't that deseralize?
+
+            // GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3 HTTP/1.1
+            StartCoroutine(GetGame(latestGame.game._id));
 
         }
     }
+
+    private IEnumerator GetGame(string gameId)
+    {
+        Debug.Log("GetGame");
+        var www = UnityWebRequest.Get($"https://arena.screeps.com/api/game/{gameId}");
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            // https://forum.unity.com/threads/json-from-webrequest.384974/
+            string response = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+            Debug.Log(response);
+            //string s = www.GetResponseHeader("set-cookie");
+            //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
+
+            // TODO: GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3 HTTP/1.1
+            gameResponse = JsonConvert.DeserializeObject<GameResponse>(response);
+
+            // TODO: we now have a game, and we could start fetching replay data
+            StartCoroutine(FetchAllReplayData(gameResponse.game._id));
+
+        }
+    }
+
+    private IEnumerator FetchAllReplayData(string gameId)
+    {
+        Debug.Log("FetchReplayData");
+
+
+        // TOOD: initialize all room objects
+        // TODO: start a loop getting replay chunks, perhaps a "download" ability that buffers them all and then saves to disk or something.
+        // TODO: get console `GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3/log/100` we can add this later, lets skip it in the start.
+
+        // TODO: a room player initializing all prefabs / roomobjects based on /replay/0
+        // TODO: loop each tick and handle their next state compared to their previous, e.g. movement. shooting, healing, so forth
+        // TODO: the tickrate should be able to be "controlled", stepping trough each state should be possible.
+
+        // TODO: `GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3/replay/0` for the initial tick `var REPlAY_CHUNK_LENGTH = 100;`
+        var ticks = gameResponse.game.meta.ticks;
+        //var terrain = gameResponse.game.game.terrain;
+        // meta.ticks contains amount of ticks keep requesting replay and console untill chunk length does not make sense.
+        // game.terrain contains terrain
+
+
+        // TODO: We now need to iterate all replay data and acquire it. later we might want some sort of stream, so we can fetch it on the go if missing tick chunks, should also seperate rendering from data fetching
+
+        var chunkId = 0;
+
+        /*
+         * https://community.playfab.com/questions/51765/libcurl-bug-in-unity-202113f1.html?page=1&pageSize=10&sort=oldest
+         * The issue seems to be that from Unity 2021.1.3f1, 
+         * UnityWebRequest no longer supports data compression. 
+         * The error "Curl error 61: Unrecognized content encoding type. libcurl understands identity content encodings."
+         */
+
+        var www = UnityWebRequest.Get($"https://arena.screeps.com/api/game/{gameId}/replay/{chunkId}");
+        //www.SetRequestHeader("Content-Type", "application/json");
+        //www.SetRequestHeader("Accept-Encoding", "identity");
+
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            //var response = DecompressGZIP(www.downloadHandler.data);
+
+            // https://forum.unity.com/threads/json-from-webrequest.384974/
+            //string response = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+            var response = Decompress(www.downloadHandler.data);
+            Debug.Log(response);
+            //string s = www.GetResponseHeader("set-cookie");
+            //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
+
+            var replayChunkResponse = new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(response) };
+            Debug.Log(replayChunkResponse);
+
+            if (chunkId == 0)
+            {
+                // initialize room, gameTime 0
+                foreach (var tick in replayChunkResponse.Ticks)
+                {
+                    var users = tick.users; // TODO: handle more than two users in the future.
+                    //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
+                    foreach (var roomObject in tick.objects)
+                    {
+                        var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+
+                        ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                        if (roomObject.type == "creep")
+                        {
+
+                            var creep = Instantiate(creepSpherePrefb);
+                            creep.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
+                            var renderer = creep.GetComponent<Renderer>();
+                            renderer.material.SetColor("_BaseColor", color);
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
+
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/dotnet/api/system.io.compression.gzipstream?redirectedfrom=MSDN&view=net-5.0
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    /// 
+    public static string Decompress(byte[] bytes)
+    {
+        // TODO: rework this.
+        using (Stream memoryStream = new MemoryStream(bytes))
+        {
+            using (Stream decompressedMemoryStream = new MemoryStream())
+            {
+                using (GZipStream decompressionStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+                {
+                    decompressionStream.CopyTo(decompressedMemoryStream);
+                    decompressedMemoryStream.Position = 0;
+
+                    using (var sr = new StreamReader(decompressedMemoryStream, Encoding.UTF8))
+                    {
+                        var result = sr.ReadToEnd(); // TODO: async
+                        return result;
+                    }
+                }
+            }
+        }
+    }
+
+    ////private static string DecompressGZIP(string strData)
+    ////{
+    ////    var data = Encoding.UTF8.GetBytes(strData);
+    ////    var output = new MemoryStream();
+    ////    using (var compressedStream = new MemoryStream(data))
+    ////    using (var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+    ////    {
+    ////        zipStream.CopyTo(output);
+    ////        zipStream.Close();
+    ////        output.Position = 0;
+    ////        return output.ToString();
+    ////    }
+
+    ////    throw new Exception("Failed to decompress gzip");
+    ////}
+
+
 
     /*
      * function getReplayRangeByTick(tick, ticks) {
@@ -194,6 +390,8 @@ public class SteamScript : MonoBehaviour
             Debug.Log(response);
             //string s = www.GetResponseHeader("set-cookie");
             //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
+
+            
         }
     }
 
@@ -286,4 +484,6 @@ public class SteamScript : MonoBehaviour
             Debug.Log("The number of players playing your game: " + pCallback.m_cPlayers);
         }
     }
+
+
 }
