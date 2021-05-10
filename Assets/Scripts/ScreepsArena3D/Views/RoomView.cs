@@ -1,4 +1,5 @@
 using Assets.Scripts.Common;
+using Assets.Scripts.ScreepsArena3D.Views;
 using Assets.Scripts.ScreepsArenaApi.Responses;
 using System;
 using System.Collections;
@@ -10,11 +11,12 @@ public class RoomView : MonoBehaviour
 {
     // object id and a reference to the game object.
     private Dictionary<string, GameObject> gameState = new Dictionary<string, GameObject>();
+    private TerrainView terrainView;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        this.terrainView = this.GetComponent<TerrainView>();
     }
 
     // Update is called once per frame
@@ -28,6 +30,8 @@ public class RoomView : MonoBehaviour
 
     internal void Tick(ReplayChunkTick tick)
     {
+        
+
         var users = tick.users; // TODO: handle more than two users in the future.
                                 //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
         var remainingObjects = gameState.Keys.ToList();

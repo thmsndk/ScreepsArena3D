@@ -1,5 +1,8 @@
 using Assets.Scripts;
 using Assets.Scripts.Common;
+using Assets.Scripts.ScreepsArena3D.Views;
+using Assets.Scripts.ScreepsArenaApi.Responses;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,8 +42,13 @@ public class GameManager : MonoBehaviour
         // TODO: some sort of logic that places a room next to other rooms if we load a new one.
         var room = PoolLoader.Load("Prefabs/RoomView", shardView.transform);
         var roomView = room.GetComponent<RoomView>();
-        
 
+        // TODO: when loading a room, we first need to feed it game data, then we feed it ticks
+        string jsonFilePath = "SavedReplay/test/game";
+        TextAsset loadedJsonFile = Resources.Load<TextAsset>(jsonFilePath);
+        var gameResponse = JsonConvert.DeserializeObject<GameResponse>(loadedJsonFile.text);
+        var terrainView = room.GetComponent<TerrainView>();
+        terrainView.Init(gameResponse.game.game.terrain, 100); // TODO: determine arena size?
         // TODO: Something that can feed data to all rooms.
 
         // TODO: Global "tick" processor that ticks all rooms. If you set a specific tick, all rooms should be fed tick data for that specific tick.
