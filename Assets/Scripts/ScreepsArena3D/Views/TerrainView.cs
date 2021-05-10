@@ -6,6 +6,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
 {
     public class TerrainView : MonoBehaviour /*,IRoomViewComponent*/
     {
+        private const char TERRAIN_WALL = '1';
+        private const char TERRAIN_SWAMP = '2';
         [SerializeField] private MeshFilter _swampMesh = default;
         [SerializeField] private MeshFilter _wallMesh = default;
         [SerializeField] private MeshFilter _terrainMesh = default;
@@ -23,6 +25,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
         private int _y;
         private bool[,] _wallPositions;
         private bool[,] _swampPositions;
+        private bool[,] _plainPositions;
         private bool isInitialized;
         private bool isInitializing;
 
@@ -32,6 +35,9 @@ namespace Assets.Scripts.ScreepsArena3D.Views
             _terrain = terrain;
             _hasTerrainData = true;
             this.size = size;
+            // dirty fix to arrange terrain correctly
+            this.transform.position = new Vector3(0f, 0f, size);
+            this.transform.rotation = Quaternion.Euler(0, 90f, 0);
         }
 
         private void Update()
@@ -45,11 +51,12 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 isInitializing = true;
                 _wallPositions = new bool[size, size];
                 _swampPositions = new bool[size, size];
+                _plainPositions = new bool[size, size];
                 _x = 0;
                 _y = 0;
             }
 
-            var time = Time.time;
+            //var time = Time.time;
             for (; _x < size; _x++)
             {
                 for (; _y < size; _y++)
@@ -57,22 +64,24 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                     _swampPositions[_x, _y] = false;
                     _wallPositions[_x, _y] = false;
 
-                    var unit = _terrain[_x + _y * size];
-                    if (unit == '0' || unit == '1')
+                    var unit = _terrain[_x  + _y * size];
+                    if (unit == '0' /*|| unit == TERRAIN_WALL*/)
                     {
+                        _plainPositions[_x, _y] = true;
                     }
-                    if (unit == '2' || unit == '3')
+                    if (unit == TERRAIN_SWAMP || unit == '3')
                     {
+                        //Debug.Log($"SWAMP: {_x}, {_y}");
                         _swampPositions[_x, _y] = true;
                     }
-                    if (unit == '1' || unit == '3')
+                    if (unit == TERRAIN_WALL || unit == '3')
                     {
                         _wallPositions[_x, _y] = true;
                     }
-                    if (Time.time - time > .001f)
-                    {
-                        return;
-                    }
+                    //if (Time.time - time > .001f)
+                    //{
+                    //    return;
+                    //}
                 }
                 _y = 0;
             }
@@ -286,45 +295,148 @@ namespace Assets.Scripts.ScreepsArena3D.Views
             _wallMesh.mesh = mesh;
         }
 
-        private void generateTerrain()
+        private void generatePlains()
         {
+            var wallCount = 0;
+            for (int x = 0; x < size; ++x)
+                for (int y = 0; y < size; ++y)
+                    if (_wallPositions[x, y] || _swampPositions[x, y])
+                        ++wallCount;
+            const int quadsPerWall = 5;
+            int vertCount = wallCount * 4 * quadsPerWall;
+            int triangleCount = wallCount * 6 * quadsPerWall;
+
+            var vertices = new Vector3[vertCount];
+            var uv = new Vector2[vertCount];
+            var triangles = new int[triangleCount];
+
+            var index = 0;
+            var tIndex = 0;
+
+            Action<Vector3, Vector3, Vector3, Vector3> addQuad = (A, B, C, D) =>
+            {
+                vertices[index] = A;
+                vertices[index + 1] = B;
+                vertices[index + 2] = C;
+                vertices[index + 3] = D;
+                uv[index] = new Vector2(0, 0);
+                uv[index + 1] = new Vector2(0, 1);
+                uv[index + 2] = new Vector2(1, 0);
+                uv[index + 3] = new Vector2(1, 1);
+                triangles[tIndex] = index;
+                triangles[tIndex + 1] = index + 1;
+                triangles[tIndex + 2] = index + 2;
+                triangles[tIndex + 3] = index + 3;
+                triangles[tIndex + 4] = index + 2;
+                triangles[tIndex + 5] = index + 1;
+                index += 4;
+                tIndex += 6;
+            };
+
             const float terrainSwampHole = -0.3f;
             const float swampRandom = 0.0f;
 
-            // swamps
-            var vertices = _terrainMesh.mesh.vertices;
-            for (var i = 0; i < vertices.Length; i++)
+            for (int x = 0; x < size; ++x)
+                for (int y = 0; y < size; ++y)
+                {
+                    var isPlains = _plainPositions[x, y];
+                    var isSwamp = _swampPositions[x, y];
+                    if (isPlains || isSwamp)
+                    {
+                        var h = isPlains ? 0f : terrainSwampHole + UnityEngine.Random.value * swampRandom;
+                        var z = size -1 - y;
+
+                        addQuad(
+                            new Vector3(x, h, z),
+                            new Vector3(x, h, z + 1),
+                            new Vector3(x + 1, h, z),
+                            new Vector3(x + 1, h, z + 1));
+                    }
+                }
+
+            Mesh mesh = new Mesh();
+            mesh.Clear();
+            mesh.vertices = vertices;
+            mesh.uv = uv;
+            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
+
+            _terrainMesh.mesh = mesh;
+        }
+
+        private void generateSwamp()
+        {
+            var wallCount = 0;
+            for (int x = 0; x < size; ++x)
+                for (int y = 0; y < size; ++y)
+                    if (_wallPositions[x, y] || _plainPositions[x, y])
+                        ++wallCount;
+            const int quadsPerWall = 5;
+            int vertCount = wallCount * 4 * quadsPerWall;
+            int triangleCount = wallCount * 6 * quadsPerWall;
+
+            var vertices = new Vector3[vertCount];
+            var uv = new Vector2[vertCount];
+            var triangles = new int[triangleCount];
+
+            var index = 0;
+            var tIndex = 0;
+
+            Action<Vector3, Vector3, Vector3, Vector3> addQuad = (A, B, C, D) =>
             {
-                var point = vertices[i];
-                if (point.x < 0 || point.x > size || point.z < 0 || point.z > size)
-                    continue;
+                vertices[index] = A;
+                vertices[index + 1] = B;
+                vertices[index + 2] = C;
+                vertices[index + 3] = D;
+                uv[index] = new Vector2(0, 0);
+                uv[index + 1] = new Vector2(0, 1);
+                uv[index + 2] = new Vector2(1, 0);
+                uv[index + 3] = new Vector2(1, 1);
+                triangles[tIndex] = index;
+                triangles[tIndex + 1] = index + 1;
+                triangles[tIndex + 2] = index + 2;
+                triangles[tIndex + 3] = index + 3;
+                triangles[tIndex + 4] = index + 2;
+                triangles[tIndex + 5] = index + 1;
+                index += 4;
+                tIndex += 6;
+            };
 
-                var x = (int)point.x;
-                if (x < 0 || x >= _swampPositions.GetLength(0))
-                    continue;
+            for (int x = 0; x < size; ++x)
+                for (int y = 0; y < size; ++y)
+                {
+                    if (_swampPositions[x, y])
+                    {
+                        var z = size - 1 - y;
 
-                var y = size - 1 - (int)point.z;
-                if (y < 0 || y >= _swampPositions.GetLength(1))
-                    continue;
+                        addQuad(
+                            new Vector3(x, 0, z),
+                            new Vector3(x, 0, z + 1),
+                            new Vector3(x + 1, 0, z),
+                            new Vector3(x + 1, 0, z + 1));
+                    }
+                }
 
-                if (!_swampPositions[x, y])
-                    continue;
+            Mesh mesh = new Mesh();
+            mesh.Clear();
+            mesh.vertices = vertices;
+            mesh.uv = uv;
+            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
 
-                vertices[i] = new Vector3(point.x, terrainSwampHole + UnityEngine.Random.value * swampRandom, point.z);
-            }
-            _terrainMesh.mesh.vertices = vertices;
-            _terrainMesh.mesh.RecalculateNormals();
+            _swampMesh.mesh = mesh;
         }
 
         private void Deform()
         {
-            // generateSwamps();
-            generateTerrain();
+            generateSwamp();
+            generatePlains();
             // generateWalls1();
             generateWalls2();
 
             _wallPositions = null;
             _swampPositions = null;
+            _plainPositions = null;
         }
     }
 }

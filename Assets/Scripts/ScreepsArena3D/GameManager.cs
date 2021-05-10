@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         string jsonFilePath = "SavedReplay/test/game";
         TextAsset loadedJsonFile = Resources.Load<TextAsset>(jsonFilePath);
         var gameResponse = JsonConvert.DeserializeObject<GameResponse>(loadedJsonFile.text);
-        var terrainView = room.GetComponent<TerrainView>();
+        var terrainView = room.GetComponentInChildren<TerrainView>();
         terrainView.Init(gameResponse.game.game.terrain, 100); // TODO: determine arena size?
         // TODO: Something that can feed data to all rooms.
 
