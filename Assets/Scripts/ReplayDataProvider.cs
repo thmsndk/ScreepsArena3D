@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Responses;
+﻿using Assets.Scripts.ScreepsArenaApi.Responses;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
