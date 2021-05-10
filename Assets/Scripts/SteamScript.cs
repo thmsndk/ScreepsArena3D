@@ -55,7 +55,7 @@ public class SteamScript : MonoBehaviour
             Debug.Log(name);
         }
 
-        StartCoroutine(RenderTicks(1f));
+        StartCoroutine(RenderTicks(10f));
     }
 
     private IEnumerator RenderTicks(float ticksPerScond)
