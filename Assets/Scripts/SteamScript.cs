@@ -13,6 +13,8 @@ using System.IO;
 using System.IO.Compression;
 using Assets.Scripts;
 
+// TODO: RTS camera https://www.youtube.com/watch?v=PsAbHoB85hM
+
 // http://steamworks.github.io/gettingstarted/
 public class SteamScript : MonoBehaviour
 {
@@ -41,6 +43,9 @@ public class SteamScript : MonoBehaviour
 
     private ReplayDataProvider replayDataProvider = new ReplayDataProvider();
 
+    // object id and a reference to the game object.
+    private Dictionary<string, GameObject> gameState = new Dictionary<string, GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,30 +55,81 @@ public class SteamScript : MonoBehaviour
             Debug.Log(name);
         }
 
+        StartCoroutine(RenderTicks(1f));
+    }
+
+    private IEnumerator RenderTicks(float ticksPerScond)
+    {
         var response = replayDataProvider.GetReplayChunk(0);
 
         // initialize room, gameTime 0
         foreach (var tick in response.Ticks)
         {
-            var users = tick.users; // TODO: handle more than two users in the future.
-                                    //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
-            foreach (var roomObject in tick.objects)
+            RenderTick(tick);
+
+            yield return new WaitForSecondsRealtime(1 / ticksPerScond);
+        }
+
+        var chunk100 = replayDataProvider.GetReplayChunk(100);
+        foreach (var tick in chunk100.Ticks)
+        {
+            RenderTick(tick);
+
+            yield return new WaitForSecondsRealtime(1f / ticksPerScond);
+        }
+
+
+    }
+
+    private void RenderTick(ReplayChunkTick tick)
+    {
+        var users = tick.users; // TODO: handle more than two users in the future.
+                                //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
+        var remainingObjects = gameState.Keys.ToList();
+        foreach (var roomObject in tick.objects)
+        {
+            if (remainingObjects.Contains(roomObject._id))
             {
-                var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+                remainingObjects.Remove(roomObject._id);
+            }
+            else
+            {
+                // An object has spawned...
+            }
 
-                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
-                if (roomObject.type == "creep")
+            if (roomObject.type == "creep")
+            {
+                gameState.TryGetValue(roomObject._id, out var creep);
+
+                if (tick.gameTime == 0)
                 {
+                    var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+                    ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
 
-                    var creep = Instantiate(creepSpherePrefb);
-                    creep.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
+                    creep = Instantiate(creepSpherePrefb);
                     var renderer = creep.GetComponent<Renderer>();
                     renderer.material.SetColor("_BaseColor", color);
+                    gameState.Add(roomObject._id, creep);
                 }
+
+                creep.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
             }
         }
 
+        // theese objects where not in this tick. does that mean they died?
+        foreach (var id in remainingObjects)
+        {
+            gameState.TryGetValue(id, out var gameObject);
+            if (gameObject)
+            {
+                Destroy(gameObject);
+                gameState.Remove(id);
+            }
+        }
+
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -417,7 +473,7 @@ public class SteamScript : MonoBehaviour
             //string s = www.GetResponseHeader("set-cookie");
             //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
 
-            
+
         }
     }
 

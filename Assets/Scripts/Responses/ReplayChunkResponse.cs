@@ -47,7 +47,7 @@ namespace Assets.Scripts.Responses
         public ReplayChunkStore store;
         public string user;
         public ReplayChunkActionLog actionLog;
-        public int _id;
+        public string _id;
     }
 
     public class ReplayChunkStore
