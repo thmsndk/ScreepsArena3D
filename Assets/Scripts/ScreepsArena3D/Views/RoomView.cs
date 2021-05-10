@@ -14,14 +14,17 @@ public class RoomView : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
+
+    // TODO: Load Terrain from game
+    // 
 
     internal void Tick(ReplayChunkTick tick)
     {
@@ -30,33 +33,58 @@ public class RoomView : MonoBehaviour
         var remainingObjects = gameState.Keys.ToList();
         foreach (var roomObject in tick.objects)
         {
+            gameState.TryGetValue(roomObject._id, out var go);
+
             if (remainingObjects.Contains(roomObject._id))
             {
                 remainingObjects.Remove(roomObject._id);
             }
             else
             {
-                // An object has spawned...
+                if (go == null)
+                {
+                    // An object has spawned...
+                    go = PoolLoader.Load($"Prefabs/RoomObjects/{roomObject.type}", this.transform);
+                    go.name = $"{roomObject.type}-{roomObject._id}";
+                    // TODO: set color if we are moving back and forth in ticks and have creeps dying/being added
+                }
             }
 
             if (roomObject.type == "creep")
             {
-                gameState.TryGetValue(roomObject._id, out var creep);
-
                 if (tick.gameTime == 0)
                 {
                     var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
                     ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
-
-                    creep = PoolLoader.Load("Prefabs/RoomObjects/Creep", this.transform);
-                    creep.name = $"creep-{roomObject._id}";
-                    var renderer = creep.GetComponent<Renderer>();
+                    var renderer = go.GetComponent<Renderer>();
                     renderer.material.SetColor("_BaseColor", color);
-                    gameState.Add(roomObject._id, creep);
+                    gameState.Add(roomObject._id, go);
                 }
 
-                creep.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
             }
+
+            if (roomObject.type == "constructedWall")
+            {
+
+            }
+
+            if (roomObject.type == "tower")
+            {
+                var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                var renderer = go.GetComponentInChildren<Renderer>();
+                renderer.material.SetColor("_BaseColor", color);
+            }
+
+            if (roomObject.type == "flag")
+            {
+                var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                var renderer = go.GetComponentInChildren<Renderer>();
+                renderer.material.SetColor("_BaseColor", color);
+            }
+
+            go.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
         }
 
         // theese objects where not in this tick. does that mean they died?
