@@ -36,8 +36,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
             _hasTerrainData = true;
             this.size = size;
             // dirty fix to arrange terrain correctly
-            this.transform.position = new Vector3(0f, 0f, size - 1f);
-            this.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+            this.transform.position = new Vector3(size - 1f, 0f, 0f);
+            this.transform.Rotate(Vector3.up, -90f);
         }
 
         private void Update()

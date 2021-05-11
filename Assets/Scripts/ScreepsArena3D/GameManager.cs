@@ -67,8 +67,9 @@ public class GameManager : MonoBehaviour
         var gameResponse = ReplayDataProvider.ReadJsonFromFile<GameResponseGame>(jsonFilePath);
 
         var terrainView = room.GetComponentInChildren<TerrainView>();
+        roomView.Init(100);
         terrainView.Init(gameResponse.game.terrain, 100); // TODO: determine arena size?
-                                                               // TODO: Something that can feed data to all rooms.
+        // TODO: Something that can feed data to all rooms.
 
         // download latest replay
 

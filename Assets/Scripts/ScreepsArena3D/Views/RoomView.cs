@@ -12,6 +12,7 @@ public class RoomView : MonoBehaviour
     // object id and a reference to the game object.
     private Dictionary<string, GameObject> gameState = new Dictionary<string, GameObject>();
     private TerrainView terrainView;
+    private int size;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,10 @@ public class RoomView : MonoBehaviour
 
     // TODO: Load Terrain from game
     // 
+    public void Init(int size)
+    {
+        this.size = size;
+    }
 
     internal void Tick(ReplayChunkTick tick)
     {
@@ -88,8 +93,8 @@ public class RoomView : MonoBehaviour
                 renderer.material.SetColor("_BaseColor", color);
             }
 
-            // we add 0.5 to move them to center of the tile
-            go.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
+            // TODO: We need a utility class to convert screeps cordinates to world cordinates.
+            go.transform.position = new Vector3(roomObject.y, 0f, roomObject.x);
         }
 
         // theese objects where not in this tick. does that mean they died?
