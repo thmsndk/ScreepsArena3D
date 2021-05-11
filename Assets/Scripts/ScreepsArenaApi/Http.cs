@@ -21,7 +21,7 @@ namespace Assets.Scripts.ScreepsArenaApi
         /// <param name="ticket">A ticket from steam authentication</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public IEnumerator ScreepsArenaLogin(string ticket, Action<AuthLoginResponse> callback)
+        public IEnumerator ScreepsArenaLogin(string ticket, Action<AuthLoginResponse> callback = null)
         {
             Debug.Log("ScreepsArenaLogin");
             Debug.Log(ticket);
@@ -53,7 +53,10 @@ namespace Assets.Scripts.ScreepsArenaApi
                 //StartCoroutine(ScreepsArenaArenaList());
                 // basic ctf id = 606873c364da921cb49855f7
 
-                callback(JsonConvert.DeserializeObject<AuthLoginResponse>(response));
+                if (callback != null)
+                {
+                    callback(JsonConvert.DeserializeObject<AuthLoginResponse>(response));
+                }
                 // use username for something, persist id as well
 
 
@@ -121,9 +124,9 @@ namespace Assets.Scripts.ScreepsArenaApi
             }
         }
 
-        public IEnumerator GetReplayChunk(string gameId, Action<ReplayChunkResponse> callback)
+        public IEnumerator GetReplayChunk(string gameId, int chunkId, Action<ReplayChunkResponse> callback)
         {
-            Debug.Log("GetReplayChunk");
+            Debug.Log($"GetReplayChunk {gameId} {chunkId}");
 
 
             // TOOD: initialize all room objects
@@ -142,8 +145,6 @@ namespace Assets.Scripts.ScreepsArenaApi
 
 
             // TODO: We now need to iterate all replay data and acquire it. later we might want some sort of stream, so we can fetch it on the go if missing tick chunks, should also seperate rendering from data fetching
-
-            var chunkId = 0;
 
             /*
              * https://community.playfab.com/questions/51765/libcurl-bug-in-unity-202113f1.html?page=1&pageSize=10&sort=oldest

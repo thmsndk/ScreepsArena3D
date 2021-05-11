@@ -88,6 +88,7 @@ public class RoomView : MonoBehaviour
                 renderer.material.SetColor("_BaseColor", color);
             }
 
+            // we add 0.5 to move them to center of the tile
             go.transform.position = new Vector3(roomObject.x, 0f, roomObject.y);
         }
 

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,26 +13,28 @@ namespace Assets.Scripts
     // This is an implementation of a data provider that fetches replay data from a saved replay / on disk
     public class ReplayDataProvider
     {
-        public ReplayChunkResponse GetReplayChunk(int tick)
+
+        public ReplayDataProvider(string gameId)
         {
-            if (tick == 0)
-            {
-                string jsonFilePath = "SavedReplay/test/0";
-                TextAsset loadedJsonFile = Resources.Load<TextAsset>(jsonFilePath);
-                
-                return new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(loadedJsonFile.text) };
-            }
+            // TODO: coroutines
+            // first it should attempt to find the replay in the "saved replays" folder, if that fails it should start fetching them from the api. when fetching a chunk, it should always check if we have it before asking the api.
+            // TODO: we should be able to unzip a replay in memory, to process data.
+            // TODO: we need to be able to persist a replay once all chunks are fetched. instead of the provider, it should probably be a replay streamer / buffer
 
-            if (tick > 0 && tick <= 100)
-            {
-                string jsonFilePath = "SavedReplay/test/100";
-                TextAsset loadedJsonFile = Resources.Load<TextAsset>(jsonFilePath);
+        }
+        
+        public ReplayChunkResponse GetReplayChunk(int chunk)
+        {
 
-                return new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(loadedJsonFile.text) };
-            }
+            string jsonFilePath = @$"{Application.persistentDataPath}\Replays\606873c364da921cb49855f7\609989f6891dffcde3f09554\{chunk}.json";
 
-            return null;
+            return new ReplayChunkResponse { Ticks = ReadJsonFromFile<ReplayChunkTick[]>(jsonFilePath) };
         }
 
+        public static T ReadJsonFromFile<T>(string filePath)
+        {
+            var json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<T>(json);
+        }
     }
 }

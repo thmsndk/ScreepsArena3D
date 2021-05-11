@@ -18,7 +18,7 @@ using Assets.Scripts.ScreepsArenaApi.Responses;
 // http://steamworks.github.io/gettingstarted/
 public class SteamScript : MonoBehaviour
 {
-    private const string ArenaCaptureTheFlagBasic = "606873c364da921cb49855f7";
+    
     protected Callback<GameOverlayActivated_t> m_GameOverlayActivated;
 
     private CallResult<NumberOfCurrentPlayers_t> m_NumberOfCurrentPlayers;

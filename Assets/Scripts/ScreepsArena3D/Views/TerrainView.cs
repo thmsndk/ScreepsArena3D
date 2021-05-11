@@ -36,8 +36,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
             _hasTerrainData = true;
             this.size = size;
             // dirty fix to arrange terrain correctly
-            this.transform.position = new Vector3(0f, 0f, size);
-            this.transform.rotation = Quaternion.Euler(0, 90f, 0);
+            this.transform.position = new Vector3(0f, 0f, size - 1f);
+            this.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
         }
 
         private void Update()
@@ -64,7 +64,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                     _swampPositions[_x, _y] = false;
                     _wallPositions[_x, _y] = false;
 
-                    var unit = _terrain[_x  + _y * size];
+                    var unit = _terrain[_x + _y * size];
                     if (unit == '0' /*|| unit == TERRAIN_WALL*/)
                     {
                         _plainPositions[_x, _y] = true;
@@ -122,10 +122,10 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 for (int x = 0; x < size; ++x)
                     wallDepth[x, y] = someHighNumber;
 
-            for (int y = 1; y < size-1; ++y)
-                for (int x = 1; x < size-1; ++x)
+            for (int y = 1; y < size - 1; ++y)
+                for (int x = 1; x < size - 1; ++x)
                 {
-                    var z = size-1 - y;
+                    var z = size - 1 - y;
                     if (!_wallPositions[x, y])
                         wallDepth[x, z] = 0;
                     else
@@ -136,18 +136,18 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                         wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z + 1] + 1);
                     }
                 }
-            for (int y = size-2; y > 0; --y)
-                for (int x = size-2; x > 0; --x)
+            for (int y = size - 2; y > 0; --y)
+                for (int x = size - 2; x > 0; --x)
                 {
-                    var z = size-1 - y;
+                    var z = size - 1 - y;
                     wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x, z - 1] + 1);
                     wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z] + 1);
                     wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x + 1, z - 1] + 1);
                     wallDepth[x, z] = Math.Min(wallDepth[x, z], wallDepth[x - 1, z - 1] + 1);
                 }
 
-            for (int y = 1; y < size-1; ++y)
-                for (int x = 1; x < size-1; ++x)
+            for (int y = 1; y < size - 1; ++y)
+                for (int x = 1; x < size - 1; ++x)
                 {
                     if (wallDepth[x, y] != wallDepth[x + 1, y]
                         && wallDepth[x, y] != wallDepth[x - 1, y]
@@ -163,7 +163,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 {
                     if (_wallPositions[x, y])
                     {
-                        var z = size-1 - y;
+                        var z = size - 1 - y;
                         wallHeight[x, y] = getY((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.z + z, wallDepth[x, z]);
                     }
                     else
@@ -249,7 +249,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                     {
                         float h = wallHeight[x, y];
                         float h2;
-                        var z = size-1 - y;
+                        var z = size - 1 - y;
 
                         addQuad(
                             new Vector3(x, h, z),
@@ -344,7 +344,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                     if (isPlains || isSwamp)
                     {
                         var h = isPlains ? 0f : terrainSwampHole + UnityEngine.Random.value * swampRandom;
-                        var z = size -1 - y;
+                        var z = size - 1 - y;
 
                         addQuad(
                             new Vector3(x, h, z),
