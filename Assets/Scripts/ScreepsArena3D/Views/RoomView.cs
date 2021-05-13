@@ -94,7 +94,7 @@ public class RoomView : MonoBehaviour
             }
 
             // TODO: We need a utility class to convert screeps cordinates to world cordinates.
-            go.transform.position = new Vector3(roomObject.y, 0f, roomObject.x);
+            go.transform.position = PosUtility.Convert(roomObject.x, roomObject.y, size);
         }
 
         // theese objects where not in this tick. does that mean they died?
