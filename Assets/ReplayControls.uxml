@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="bottom: auto; top: 90%;">
+        <ui:Label text="0/2000" display-tooltip-when-elided="true" name="TickLabel" style="align-items: center; justify-content: center; -unity-text-align: middle-center;" />
+        <ui:Slider picking-mode="Ignore" value="0" high-value="100" name="TickSlider" />
+        <ui:VisualElement name="Buttons" style="flex-direction: row; justify-content: center;">
+            <ui:Button text="&lt;" display-tooltip-when-elided="true" name="PrevButton" style="width: 147px;" />
+            <ui:Button text="Play/Pause" display-tooltip-when-elided="true" name="PlayPauseButton" focusable="false" />
+            <ui:Button text="&gt;" display-tooltip-when-elided="true" name="NextButton" style="width: 151px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

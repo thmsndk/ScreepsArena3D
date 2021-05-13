@@ -1,0 +1,33 @@
+{
+    "name": "InputActions",
+    "maps": [
+        {
+            "name": "PlayPauseButton",
+            "id": "8147a39e-26b3-466a-a981-c41ba48ac33f",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "f7e78300-c377-4adf-8b38-a0d18c27bd29",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3c2b658c-9334-46ca-a6ca-756a8e328da8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
