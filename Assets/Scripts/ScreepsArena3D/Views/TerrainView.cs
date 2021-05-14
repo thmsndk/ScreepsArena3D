@@ -295,6 +295,11 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 }
 
             Mesh mesh = new Mesh();
+            // http://answers.unity.com/answers/1673043/view.html
+            /* If you create a Mesh from code the default indexFormat is still 16 bit as it'S enough for more cases and it requires just half the memory than a 32 bit index buffer. 
+             * Since they added the indexFormat setting you can now simply set it to 32 bit and the generated index buffer will be 32 bit per index (so it supports up to 4 billion vertices).
+             */
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
             mesh.Clear();
             mesh.vertices = vertices;
             mesh.uv = uv;
