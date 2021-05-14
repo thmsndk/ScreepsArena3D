@@ -57,8 +57,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 _y = 0;
             }
 
-            Debug.Log($"terrain: {_terrain.Length}");
-            Debug.Log($"terrain: {_terrain}");
+            //Debug.Log($"terrain: {_terrain.Length}");
+            //Debug.Log($"terrain: {_terrain}");
             //var time = Time.time;
             for (; _x < size; _x++)
             {
@@ -168,10 +168,10 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                     {
                         var z = size - 1 - y;
                         wallHeight[x, y] = getY(((int)gameObject.transform.position.x) + x, ((int)gameObject.transform.position.z) + z, wallDepth[x, z]);
-                        if ((y == 99f || x == 0) || (x == 99f || y == 0))
-                        {
-                            Debug.Log($"{x},{y} height = {wallHeight[x, y]}");
-                        }
+                        //if ((y == 99f || x == 0) || (x == 99f || y == 0))
+                        //{
+                        //    Debug.Log($"{x},{y} height = {wallHeight[x, y]}");
+                        //}
                     }
                     else
                     {
@@ -311,14 +311,14 @@ namespace Assets.Scripts.ScreepsArena3D.Views
 
         private void generatePlains()
         {
-            var wallCount = 0;
+            var plainCount = 0;
             for (int x = 0; x < size; ++x)
                 for (int y = 0; y < size; ++y)
-                    if (_wallPositions[x, y] || _swampPositions[x, y])
-                        ++wallCount;
-            const int quadsPerWall = 5;
-            int vertCount = wallCount * 4 * quadsPerWall;
-            int triangleCount = wallCount * 6 * quadsPerWall;
+                    if (_plainPositions[x, y] || _swampPositions[x, y])
+                        ++plainCount;
+            const int quadsPerWall = 1;
+            int vertCount = plainCount * 4 * quadsPerWall;
+            int triangleCount = plainCount * 6 * quadsPerWall;
 
             var vertices = new Vector3[vertCount];
             var uv = new Vector2[vertCount];
@@ -355,7 +355,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 {
                     var isPlains = _plainPositions[x, y];
                     var isSwamp = _swampPositions[x, y];
-                    if (isPlains || isSwamp)
+                    if (isPlains /*|| isSwamp*/)
                     {
                         var h = isPlains ? 0f : terrainSwampHole + UnityEngine.Random.value * swampRandom;
                         var z = size - 1 - y;
@@ -380,14 +380,14 @@ namespace Assets.Scripts.ScreepsArena3D.Views
 
         private void generateSwamp()
         {
-            var wallCount = 0;
+            var swampCount = 0;
             for (int x = 0; x < size; ++x)
                 for (int y = 0; y < size; ++y)
-                    if (_wallPositions[x, y] || _plainPositions[x, y])
-                        ++wallCount;
-            const int quadsPerWall = 5;
-            int vertCount = wallCount * 4 * quadsPerWall;
-            int triangleCount = wallCount * 6 * quadsPerWall;
+                    if (_swampPositions[x, y])
+                        ++swampCount;
+            const int quadsPerWall = 1;
+            int vertCount = swampCount * 4 * quadsPerWall;
+            int triangleCount = swampCount * 6 * quadsPerWall;
 
             var vertices = new Vector3[vertCount];
             var uv = new Vector2[vertCount];
