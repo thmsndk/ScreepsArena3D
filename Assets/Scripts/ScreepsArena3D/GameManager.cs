@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
         // TODO: when loading a room, we first need to feed it game data, then we feed it ticks
         string jsonFilePath = @$"{Application.persistentDataPath}\Replays\606873c364da921cb49855f7\609989f6891dffcde3f09554\game.json";
         var gameResponse = ReplayDataProvider.ReadJsonFromFile<GameResponseGame>(jsonFilePath);
+        Debug.Log(jsonFilePath);
 
         var terrainView = room.GetComponentInChildren<TerrainView>();
         roomView.Init(100);
