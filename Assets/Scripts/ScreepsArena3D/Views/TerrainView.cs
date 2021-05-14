@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Assets.Scripts.Common;
 
 namespace Assets.Scripts.ScreepsArena3D.Views
 {
@@ -56,6 +57,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                 _y = 0;
             }
 
+            Debug.Log($"terrain: {_terrain.Length}");
+            Debug.Log($"terrain: {_terrain}");
             //var time = Time.time;
             for (; _x < size; _x++)
             {
@@ -95,7 +98,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
         private float getRandom(int x, int z)
         {
 
-            var seed = ((int)gameObject.transform.position.x + x) * 1000 + (int)gameObject.transform.position.z + z;
+            var seed = ((int)gameObject.transform.position.x + x) * 1000 + ((int)gameObject.transform.position.z + z);
             UnityEngine.Random.InitState(seed);
             return UnityEngine.Random.value;
         }
@@ -156,7 +159,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                         --wallDepth[x, y];
                 }
 
-            // calculate wall heights
+            //// calculate wall heights
             var wallHeight = new float[size, size];
             for (int x = 0; x < size; ++x)
                 for (int y = 0; y < size; ++y)
@@ -164,7 +167,11 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                     if (_wallPositions[x, y])
                     {
                         var z = size - 1 - y;
-                        wallHeight[x, y] = getY((int)gameObject.transform.position.x + x, (int)gameObject.transform.position.z + z, wallDepth[x, z]);
+                        wallHeight[x, y] = getY(((int)gameObject.transform.position.x) + x, ((int)gameObject.transform.position.z) + z, wallDepth[x, z]);
+                        if ((y == 99f || x == 0) || (x == 99f || y == 0))
+                        {
+                            Debug.Log($"{x},{y} height = {wallHeight[x, y]}");
+                        }
                     }
                     else
                     {
@@ -222,7 +229,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views
             var index = 0;
             var tIndex = 0;
 
-            Action<Vector3, Vector3, Vector3, Vector3> addQuad = (A, B, C, D) =>
+            Action<Vector3, Vector3, Vector3, Vector3> addQuad = (Vector3 A, Vector3 B, Vector3 C, Vector3 D) =>
             {
                 vertices[index] = A;
                 vertices[index + 1] = B;
@@ -252,10 +259,10 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                         var z = size - 1 - y;
 
                         addQuad(
-                            new Vector3(x, h, z),
-                            new Vector3(x, h, z + 1),
-                            new Vector3(x + 1, h, z),
-                            new Vector3(x + 1, h, z + 1));
+                             new Vector3(x, h, z),
+                             new Vector3(x, h, z + 1),
+                             new Vector3(x + 1, h, z),
+                             new Vector3(x + 1, h, z + 1));
 
                         h2 = x > 0 ? wallHeight[x - 1, y] : 0.0f;
                         addQuad(
@@ -263,7 +270,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                             new Vector3(x, h, z),
                             new Vector3(x, h2, z + 1),
                             new Vector3(x, h2, z));
-                        h2 = x < size - 1 ? wallHeight[x + 1, y] : 0.0f;
+
+                        h2 = x < (size -1) ? wallHeight[x + 1, y] : 0.0f;
                         addQuad(
                             new Vector3(x + 1, h, z),
                             new Vector3(x + 1, h, z + 1),
@@ -276,7 +284,8 @@ namespace Assets.Scripts.ScreepsArena3D.Views
                             new Vector3(x, h, z + 1),
                             new Vector3(x + 1, h2, z + 1),
                             new Vector3(x, h2, z + 1));
-                        h2 = y < size - 1 ? wallHeight[x, y + 1] : 0.0f;
+
+                        h2 = y < (size -1) ? wallHeight[x, y + 1] : 0.0f;
                         addQuad(
                             new Vector3(x, h, z),
                             new Vector3(x + 1, h, z),
@@ -431,7 +440,6 @@ namespace Assets.Scripts.ScreepsArena3D.Views
         {
             generateSwamp();
             generatePlains();
-            // generateWalls1();
             generateWalls2();
 
             _wallPositions = null;
