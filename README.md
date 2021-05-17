@@ -7,6 +7,8 @@ Extract `TestReplay\ScreepsArena3D.zip` into `%AppData%\..\LocalLow\ScreepsCommu
 example:
 `C:\Users\thmsn\AppData\LocalLow\ScreepsCommunity\ScreepsArena3D\Replays\606873c364da921cb49855f7\609989f6891dffcde3f09554`
 
+Replays are currently cached in `%AppData%\..\LocalLow\ScreepsCommunity`, you can make a copy of theese if you wish to be able to load a replay again at a later time.
+
 TODO:
 - [ ] Rooms should be able to instantly swap to another data state (tick)
 - [ ] A component that can fetch data
@@ -18,6 +20,10 @@ TODO:
   - [ ] Tower
   - [ ] Spawn
   - [ ] Wall
+  - [ ] Rampart
+  - [ ] Source
+  - [ ] Resource
+  - [ ] Flag
 - Animate actions
   - [ ] creep
   - [ ] tower
@@ -26,6 +32,7 @@ TODO:
 - [ ] Show a list of arenas
   - [ ] Show a list of your replays for selected arena.
 - [ ] Render a selected replay
+- [ ] use gameId.GetHashCode() for room terrain seed - so a unique terrain is generated the same way each time.
 
 
 Later / Ideas

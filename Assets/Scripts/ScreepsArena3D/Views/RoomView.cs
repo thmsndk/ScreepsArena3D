@@ -31,6 +31,8 @@ public class RoomView : MonoBehaviour
     public void Init(int size)
     {
         this.size = size;
+        // new up a data provider, start listening for events. the data provider should also subscribe to the replay controls, though that seems tightly coupled.
+        // We should listen for terrain and tick data, perhaps we want to wire all this up in RoomManager instead.
     }
 
     internal void Tick(ReplayChunkTick tick)

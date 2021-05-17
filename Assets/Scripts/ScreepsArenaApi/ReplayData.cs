@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.ScreepsArenaApi
 {
-    public struct Replay
+    public struct ReplayData
     {
-        public Replay(GameResponse game)
+        public ReplayData(GameResponseGame game)
         {
-            Game = game.game;
+            Game = game;
             ReplayChunks = new Dictionary<int, ReplayChunkResponse>();
         }
 

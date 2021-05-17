@@ -26,7 +26,7 @@ public class ReplayControl : MonoBehaviour
 
     private Coroutine tickIncrementer;
 
-    private int ticksPerScond = 10;
+    private float ticksPerScond = 0.5f;
 
     private void OnEnable()
     {
@@ -56,6 +56,10 @@ public class ReplayControl : MonoBehaviour
             slider.SetValueWithoutNotify(slider.value - 1);
             UpdateTickLabel(slider.value);
             OnPrevious?.Invoke((int)slider.value);
+
+            Debug.Log("Tick:  " + slider.value);
+            OnTick?.Invoke((int)slider.value);
+
         });
 
         playPauseButton.RegisterCallback<ClickEvent>(ev =>
@@ -83,6 +87,9 @@ public class ReplayControl : MonoBehaviour
             slider.SetValueWithoutNotify(slider.value + 1);
             UpdateTickLabel(slider.value);
             OnNext?.Invoke((int)slider.value);
+            
+            Debug.Log("Tick:  " + slider.value);
+            OnTick?.Invoke((int)slider.value);
         });
 
         slider.RegisterCallback<ClickEvent>(ev =>
@@ -97,11 +104,12 @@ public class ReplayControl : MonoBehaviour
     {
         while (slider.value < slider.highValue)
         {
-            slider.SetValueWithoutNotify(slider.value + 1);
-            UpdateTickLabel(slider.value);
             Debug.Log("Ticking:  " + slider.value);
             OnTick?.Invoke((int)slider.value);
+
             yield return new WaitForSecondsRealtime(1 / ticksPerScond);
+            slider.SetValueWithoutNotify(slider.value + 1);
+            UpdateTickLabel(slider.value);
         }
     }
 
