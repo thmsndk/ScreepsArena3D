@@ -58,6 +58,7 @@ public class RoomView : MonoBehaviour
                     go = PoolLoader.Load($"Prefabs/RoomObjects/{roomObject.type}", this.transform);
                     go.name = $"{roomObject.type}-{roomObject._id}";
                     // TODO: set color if we are moving back and forth in ticks and have creeps dying/being added
+                    gameState.Add(roomObject._id, go);
                 }
             }
 
@@ -70,7 +71,7 @@ public class RoomView : MonoBehaviour
                     var renderer = go.GetComponentInChildren<Renderer>();
                     //renderer.material.SetColor("_BaseColor", color);
                     renderer.material.SetColor("_EmissionColor", color);
-                    gameState.Add(roomObject._id, go);
+                    
                 }
 
             }
@@ -109,7 +110,10 @@ public class RoomView : MonoBehaviour
             gameState.TryGetValue(id, out var gameObject);
             if (gameObject)
             {
-                Destroy(gameObject);
+                var roomObjectType = gameObject.name.Substring(0, gameObject.name.IndexOf("-"));
+                var poolLoaderPath = $"Prefabs/RoomObjects/{roomObjectType}";
+                Debug.Log($"Returning {gameObject.name} to the pool for {roomObjectType}");
+                PoolLoader.Return(poolLoaderPath, gameObject);
                 gameState.Remove(id);
             }
         }
