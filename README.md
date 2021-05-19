@@ -10,6 +10,7 @@ example:
 Replays are currently cached in `%AppData%\..\LocalLow\ScreepsCommunity`, you can make a copy of theese if you wish to be able to load a replay again at a later time.
 
 TODO:
+- [ ] RTS Cinemachine Camera
 - [ ] Rooms should be able to instantly swap to another data state (tick)
 - [ ] A component that can fetch data
   - [ ] This data should be fetched from a cache
@@ -39,4 +40,3 @@ Later / Ideas
 - Save replays as zip files once all data is acquired
 - Ability to extract zip files in memory 
 - Show multiple arenas at the same time?
-- Ability to press "Play" ?

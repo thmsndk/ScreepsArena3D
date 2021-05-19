@@ -67,8 +67,9 @@ public class RoomView : MonoBehaviour
                 {
                     var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
                     ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
-                    var renderer = go.GetComponent<Renderer>();
-                    renderer.material.SetColor("_BaseColor", color);
+                    var renderer = go.GetComponentInChildren<Renderer>();
+                    //renderer.material.SetColor("_BaseColor", color);
+                    renderer.material.SetColor("_EmissionColor", color);
                     gameState.Add(roomObject._id, go);
                 }
 
@@ -92,7 +93,10 @@ public class RoomView : MonoBehaviour
                 var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
                 ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
                 var renderer = go.GetComponentInChildren<Renderer>();
-                renderer.material.SetColor("_BaseColor", color);
+                //renderer.material.SetColor("_BaseColor", color);
+
+                renderer.material.SetColor(ShaderKeys.FlagShader.PrimaryColor, color);
+                renderer.material.SetColor(ShaderKeys.FlagShader.SecondaryColor, color);
             }
 
             // TODO: We need a utility class to convert screeps cordinates to world cordinates.
