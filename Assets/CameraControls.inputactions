@@ -1,0 +1,79 @@
+{
+    "name": "CameraControls",
+    "maps": [
+        {
+            "name": "Mouse",
+            "id": "f1f0de99-e204-4da5-9457-908a7bb5398c",
+            "actions": [
+                {
+                    "name": "Pan",
+                    "type": "PassThrough",
+                    "id": "6b5a8281-1aae-4afb-8e7e-7c7898a0352a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Zoom",
+                    "type": "PassThrough",
+                    "id": "3e612a6b-731b-441f-99f8-1815e9c6c283",
+                    "expectedControlType": "Axis",
+                    "processors": "Normalize(min=-1,max=1),Invert",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "320739a6-15dd-4808-a0b0-413420d2b1cc",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pan",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a054717a-d414-4698-bbfd-52d68fe3083c",
+                    "path": "<Mouse>/scroll/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Keyboard",
+            "id": "4bfe4b86-99de-4480-a95e-b5be1f0b84c4",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "8165b3f8-d96b-449a-bc1b-48f5e42a73c3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "95b3d212-cd12-4c26-86cd-68a4bd0ea9f6",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

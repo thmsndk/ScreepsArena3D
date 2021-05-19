@@ -24,7 +24,8 @@ TODO:
   - [ ] Rampart
   - [ ] Source
   - [ ] Resource
-  - [ ] Flag
+  - [x] Flag
+    - [ ] Change direction of flag, or perhaps the type of flag
 - Animate actions
   - [ ] creep
   - [ ] tower

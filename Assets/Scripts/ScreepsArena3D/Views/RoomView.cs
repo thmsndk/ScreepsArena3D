@@ -91,6 +91,7 @@ public class RoomView : MonoBehaviour
 
             if (roomObject.type == "flag")
             {
+                // TODO: this kind of logic belongs in "views" and theese views should be on the prefabs of the room objects
                 var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
                 ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
                 var renderer = go.GetComponentInChildren<Renderer>();

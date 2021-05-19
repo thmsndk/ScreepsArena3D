@@ -26,7 +26,7 @@ public class ReplayControl : MonoBehaviour
 
     private Coroutine tickIncrementer;
 
-    private float ticksPerScond = 0.5f;
+    private float ticksPerScond = 5f;//0.5f;
 
     private void OnEnable()
     {
