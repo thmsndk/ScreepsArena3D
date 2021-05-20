@@ -52,9 +52,11 @@ public class CameraPanAndZoom : MonoBehaviour
          * In a 3d game, adjusting the field of view can distort your visuals. 
          * Sometimes you might want that like a scope or something but in an RTS you probably don't want to stretch the edge of your screen
          */
-        var fov = virtualCamera.m_Lens.FieldOfView; // TODO: do something else in 3D
-        var target = Mathf.Clamp(fov + increment, zoomInMax, zoomOutMax); // TODO: invert on action?
-        virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(fov, target, zoomSpeed * Time.deltaTime);
+        //var fov = virtualCamera.m_Lens.FieldOfView; // TODO: do something else in 3D
+        //var target = Mathf.Clamp(fov + increment, zoomInMax, zoomOutMax); // TODO: invert on action?
+        //virtualCamera.m_Lens.FieldOfView = Mathf.Lerp(fov, target, zoomSpeed * Time.deltaTime);
+        var target = Mathf.Clamp(cameraTransform.position.y + increment, zoomInMax, zoomOutMax);
+        cameraTransform.position = new Vector3(cameraTransform.position.x, Mathf.Lerp(cameraTransform.position.y, target, zoomSpeed * Time.deltaTime), cameraTransform.position.z);
     }
     public Vector3 PanDirection(float x, float y)
     {
