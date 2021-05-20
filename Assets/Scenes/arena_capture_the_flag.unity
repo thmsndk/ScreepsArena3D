@@ -2865,8 +2865,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerIndex: -1
-  XYAxis: {fileID: -6602704761719043711, guid: 4ac1e9d7e067d2748b0e49a309aeaf15, type: 3}
-  ZAxis: {fileID: 5194134833135989325, guid: 4ac1e9d7e067d2748b0e49a309aeaf15, type: 3}
+  XYAxis: {fileID: 2063335980582345890, guid: 4ac1e9d7e067d2748b0e49a309aeaf15, type: 3}
+  ZAxis: {fileID: -3743580255127184820, guid: 4ac1e9d7e067d2748b0e49a309aeaf15, type: 3}
 --- !u!114 &904914803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2896,7 +2896,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.497807, y: 1}
+    m_SensorSize: {x: 1.483871, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
     Aperture: 16
