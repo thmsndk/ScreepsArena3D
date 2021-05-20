@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -223,11 +223,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -903,7 +903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -939,11 +939,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1.4
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1475,9 +1475,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 4
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: 0.5
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &467756498
 MonoBehaviour:
@@ -1511,11 +1511,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1570,7 +1570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -1606,11 +1606,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1665,7 +1665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -1701,11 +1701,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2085,7 +2085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -2121,11 +2121,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2462,7 +2462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -2498,11 +2498,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1.4
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2755,7 +2755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -2791,11 +2791,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3216,7 +3216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -3250,13 +3250,13 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 0
     m_SensorSize: {x: 1, y: 1}
-    Iso: 100
-    ShutterSpeed: 60
-    Aperture: 1.2
-    BladeCount: 8
-    Curvature: {x: 0.7, y: 0.7}
-    BarrelClipping: 0.3
-    Anamorphism: 1
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4257,9 +4257,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 4
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: 2
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &1202700837
 MonoBehaviour:
@@ -4293,11 +4293,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1.4
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4636,9 +4636,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 4
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: 1
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &1294455528
 MonoBehaviour:
@@ -4672,11 +4672,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1.4
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4731,7 +4731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -4767,11 +4767,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4826,7 +4826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -4862,11 +4862,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4921,7 +4921,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -4957,11 +4957,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1.4
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -5059,7 +5059,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -5095,11 +5095,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -5154,7 +5154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -5190,11 +5190,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1.4
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -5447,7 +5447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -5483,11 +5483,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 1
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -5542,9 +5542,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: -1
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &1514117015
 MonoBehaviour:
@@ -5578,11 +5578,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6262,7 +6262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -6296,13 +6296,13 @@ MonoBehaviour:
     LensShift: {x: 0, y: 0}
     GateFit: 0
     m_SensorSize: {x: 1, y: 1}
-    Iso: 100
-    ShutterSpeed: 60
-    Aperture: 1.2
-    BladeCount: 8
-    Curvature: {x: 0.7, y: 0.7}
-    BarrelClipping: 0.3
-    Anamorphism: 1
+    Iso: 200
+    ShutterSpeed: 0.005
+    Aperture: 16
+    BladeCount: 5
+    Curvature: {x: 2, y: 11}
+    BarrelClipping: 0.25
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6456,9 +6456,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: -1
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &1706685499
 MonoBehaviour:
@@ -6492,11 +6492,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6769,7 +6769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -6805,11 +6805,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -6848,7 +6848,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1766869843
 Transform:
   m_ObjectHideFlags: 0
@@ -6894,7 +6894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
   m_FocusOffset: 0
   m_Profile: {fileID: 0}
@@ -6930,11 +6930,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -8223,9 +8223,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 3
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: -3
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &1932624322
 MonoBehaviour:
@@ -8259,11 +8259,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -8776,9 +8776,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FocusTracksTarget: 0
-  m_FocusTracking: 4
+  m_FocusTracking: 0
   m_FocusTarget: {fileID: 0}
-  m_FocusOffset: 0.5
+  m_FocusOffset: 0
   m_Profile: {fileID: 0}
 --- !u!114 &2086215317
 MonoBehaviour:
@@ -8812,11 +8812,11 @@ MonoBehaviour:
     m_SensorSize: {x: 1, y: 1}
     Iso: 200
     ShutterSpeed: 0.005
-    Aperture: 2
-    BladeCount: 9
+    Aperture: 16
+    BladeCount: 5
     Curvature: {x: 2, y: 11}
     BarrelClipping: 0.25
-    Anamorphism: 0.7
+    Anamorphism: 0
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
