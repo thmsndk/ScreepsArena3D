@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class CameraPanAndZoom : MonoBehaviour
+public class CameraRTS : MonoBehaviour
 {
     [SerializeField] private float panSpeed = 20f;
     [SerializeField] private float zoomSpeed = 3f;
@@ -14,11 +14,33 @@ public class CameraPanAndZoom : MonoBehaviour
     private CinemachineVirtualCamera virtualCamera;
     private Transform cameraTransform;
 
+    private CameraControls cameraControls;
+
     private void Awake()
     {
+        cameraControls = new CameraControls();
         inputProvider = GetComponent<CinemachineInputProvider>();
         virtualCamera = GetComponent<CinemachineVirtualCamera>();
         cameraTransform = virtualCamera.VirtualCameraGameObject.transform;
+    }
+
+    private void OnEnable()
+    {
+        cameraControls.Enable();
+    }
+    private void OnDisable()
+    {
+        cameraControls.Disable();
+    }
+
+    public Vector2 GetMovement()
+    {
+        return cameraControls.Camera.Movement.ReadValue<Vector2>();
+    }
+
+    public Vector2 GetLook()
+    {
+        return cameraControls.Camera.Look.ReadValue<Vector2>();
     }
 
     // Start is called before the first frame update
@@ -34,16 +56,29 @@ public class CameraPanAndZoom : MonoBehaviour
         var y = inputProvider.GetAxisValue(1);
         var z = inputProvider.GetAxisValue(2);
 
-        if (x !=  0 || y != 0)
+        if (x != 0 || y != 0)
         {
             PanScreen(x, y);
         }
 
-        if (z!= 0)
+        if (z != 0)
         {
             Zoom(z);
         }
+
+        // WASD movement
+        var movement = GetMovement();
+        var move = cameraTransform.up * movement.y // move camera forward and backward
+                 + cameraTransform.right * movement.x; // strafe camera left and right
+        const float moveSpeed = 20f;
+
+        if (move.x != 0 || move.y != 0)
+        {
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTransform.position + move, moveSpeed * Time.deltaTime);
+        }
+
     }
+
     public void Zoom(float increment)
     {
         /*

@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class CameraMovement : MonoBehaviour
+public class CameraPlayer : MonoBehaviour
 {
     //[SerializeField] private float panSpeed = 20f;
     //[SerializeField] private float zoomSpeed = 3f;
     //[SerializeField] private float zoomInMax = 40f;
     //[SerializeField] private float zoomOutMax = 90f;
 
-    private CameraControls cameraControls;
+    private CameraControls cameraControls; // TODO: InputManager for camera controls, possibly other controls as well
     private CinemachineVirtualCamera virtualCamera;
     private Transform cameraTransform;
+
+    [SerializeField] private Transform player;
 
     private void Awake()
     {
@@ -43,7 +45,7 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -51,15 +53,13 @@ public class CameraMovement : MonoBehaviour
     {
         // WASD movement
         var movement = GetMovement();
-        //var move = new Vector3(movement.x, 0f, movement.y);
-        //move = cameraTransform.forward * move.z + cameraTransform.right * move.x;
         var move = cameraTransform.forward * movement.y // move camera in looking direction
                  + cameraTransform.right * movement.x; // strafe camera left and right
         const float moveSpeed = 20f;
 
         if (move.x != 0 || move.y != 0)
         {
-            cameraTransform.position = Vector3.Lerp(cameraTransform.position, cameraTransform.position + move, moveSpeed * Time.deltaTime);
+            player.position = Vector3.Lerp(cameraTransform.position, cameraTransform.position + move, moveSpeed * Time.deltaTime);
         }
 
     }
