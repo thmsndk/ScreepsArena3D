@@ -7,115 +7,141 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RoomView : MonoBehaviour
+namespace Assets.Scripts.ScreepsArena3D
 {
-    // object id and a reference to the game object.
-    private Dictionary<string, GameObject> gameState = new Dictionary<string, GameObject>();
-    private TerrainView terrainView;
-    private int size;
-
-    // Start is called before the first frame update
-    void Start()
+    public class RoomView : MonoBehaviour
     {
-        this.terrainView = this.GetComponent<TerrainView>();
-    }
+        // object id and a reference to the game object.
+        private Dictionary<string, GameObject> gameState = new Dictionary<string, GameObject>();
+        private TerrainView terrainView;
+        private int size;
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    // TODO: Load Terrain from game
-    // 
-    public void Init(int size)
-    {
-        this.size = size;
-        // new up a data provider, start listening for events. the data provider should also subscribe to the replay controls, though that seems tightly coupled.
-        // We should listen for terrain and tick data, perhaps we want to wire all this up in RoomManager instead.
-    }
-
-    internal void Tick(ReplayChunkTick tick)
-    {
-        
-
-        var users = tick.users; // TODO: handle more than two users in the future.
-                                //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
-        var remainingObjects = gameState.Keys.ToList();
-        foreach (var roomObject in tick.objects)
+        // Start is called before the first frame update
+        void Start()
         {
-            gameState.TryGetValue(roomObject._id, out var go);
+            terrainView = GetComponent<TerrainView>();
+        }
 
-            if (remainingObjects.Contains(roomObject._id))
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        // TODO: Load Terrain from game
+        // 
+        public void Init(int size)
+        {
+            this.size = size;
+            // new up a data provider, start listening for events. the data provider should also subscribe to the replay controls, though that seems tightly coupled.
+            // We should listen for terrain and tick data, perhaps we want to wire all this up in RoomManager instead.
+        }
+
+        internal void Tick(ReplayChunkTick tick)
+        {
+
+
+            var users = tick.users; // TODO: handle more than two users in the future.
+                                    //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
+            var remainingObjects = gameState.Keys.ToList();
+            foreach (var roomObject in tick.objects)
             {
-                remainingObjects.Remove(roomObject._id);
-            }
-            else
-            {
-                if (go == null)
+                gameState.TryGetValue(roomObject._id, out var go);
+                RoomObjectView view;
+
+                if (remainingObjects.Contains(roomObject._id))
                 {
-                    // An object has spawned...
-                    go = PoolLoader.Load($"Prefabs/RoomObjects/{roomObject.type}", this.transform);
-                    go.name = $"{roomObject.type}-{roomObject._id}";
-                    // TODO: set color if we are moving back and forth in ticks and have creeps dying/being added
-                    gameState.Add(roomObject._id, go);
+                    view = go.GetComponent<RoomObjectView>();
+                    remainingObjects.Remove(roomObject._id);
                 }
-            }
+                else
+                {
+                    if (go == null)
+                    {
+                        // An object has spawned...
+                        go = PoolLoader.Load($"Prefabs/RoomObjects/{roomObject.type}", transform);
+                        go.name = $"{roomObject.type}-{roomObject._id}";
+                        // TODO: set color if we are moving back and forth in ticks and have creeps dying/being added
+                        gameState.Add(roomObject._id, go);
+                        // TODO: we might want to persist a RoomObjectView instead of the gameobject, allowing us to call .Init/Load .Unload or .Tick
+                        view = go.GetComponent<RoomObjectView>();
+                        if (view != null)
+                        {
+                            view?.Init();
+                            view?.Load(roomObject);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"{go.name} prefab has no RoomObjectView component assigned.");
+                        }
+                    }
+                    else
+                    {
+                        // TODO: we should probably store the objectview in the gamestate instead of the game object.
+                        view = go.GetComponent<RoomObjectView>();
+                    }
+                }
 
-            if (roomObject.type == "creep")
-            {
-                if (tick.gameTime == 0)
+                view?.Tick(roomObject);
+
+                if (roomObject.type == Constants.TypeCreep)
+                {
+                    if (tick.gameTime == 0)
+                    {
+                        var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+                        ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                        var renderer = go.GetComponentInChildren<Renderer>();
+                        //renderer.material.SetColor("_BaseColor", color);
+                        renderer.material.SetColor("_EmissionColor", color);
+
+                    }
+
+                }
+
+                if (roomObject.type == Constants.TypeConstructedWall)
+                {
+
+                }
+
+                if (roomObject.type == Constants.TypeTower)
                 {
                     var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
                     ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
                     var renderer = go.GetComponentInChildren<Renderer>();
-                    //renderer.material.SetColor("_BaseColor", color);
-                    renderer.material.SetColor("_EmissionColor", color);
-                    
+                    renderer.material.SetColor("_BaseColor", color);
                 }
 
+                if (roomObject.type == Constants.TypeFlag)
+                {
+                    // TODO: this kind of logic belongs in "views" and theese views should be on the prefabs of the room objects
+                    var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
+                    ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                    var renderer = go.GetComponentInChildren<Renderer>();
+                    //renderer.material.SetColor("_BaseColor", color);
+
+                    renderer.material.SetColor(ShaderKeys.FlagShader.PrimaryColor, color);
+                    renderer.material.SetColor(ShaderKeys.FlagShader.SecondaryColor, color);
+                }
+
+                // TODO: We need a utility class to convert screeps cordinates to world cordinates.
+                go.transform.position = PosUtility.Convert(roomObject.x, roomObject.y, size);
             }
 
-            if (roomObject.type == "constructedWall")
+            // theese objects where not in this tick. does that mean they died?
+            foreach (var id in remainingObjects)
             {
+                gameState.TryGetValue(id, out var gameObject);
+                if (gameObject)
+                {
+                    var view = gameObject.GetComponent<RoomObjectView>();
+                    view?.Unload();
 
-            }
-
-            if (roomObject.type == "tower")
-            {
-                var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
-                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
-                var renderer = go.GetComponentInChildren<Renderer>();
-                renderer.material.SetColor("_BaseColor", color);
-            }
-
-            if (roomObject.type == "flag")
-            {
-                // TODO: this kind of logic belongs in "views" and theese views should be on the prefabs of the room objects
-                var ownerColorHex = users.player1._id == roomObject.user ? users.player1.color : users.player2.color;
-                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
-                var renderer = go.GetComponentInChildren<Renderer>();
-                //renderer.material.SetColor("_BaseColor", color);
-
-                renderer.material.SetColor(ShaderKeys.FlagShader.PrimaryColor, color);
-                renderer.material.SetColor(ShaderKeys.FlagShader.SecondaryColor, color);
-            }
-
-            // TODO: We need a utility class to convert screeps cordinates to world cordinates.
-            go.transform.position = PosUtility.Convert(roomObject.x, roomObject.y, size);
-        }
-
-        // theese objects where not in this tick. does that mean they died?
-        foreach (var id in remainingObjects)
-        {
-            gameState.TryGetValue(id, out var gameObject);
-            if (gameObject)
-            {
-                var roomObjectType = gameObject.name.Substring(0, gameObject.name.IndexOf("-"));
-                var poolLoaderPath = $"Prefabs/RoomObjects/{roomObjectType}";
-                Debug.Log($"Returning {gameObject.name} to the pool for {roomObjectType}");
-                PoolLoader.Return(poolLoaderPath, gameObject);
-                gameState.Remove(id);
+                    var roomObjectType = gameObject.name.Substring(0, gameObject.name.IndexOf("-"));
+                    var poolLoaderPath = $"Prefabs/RoomObjects/{roomObjectType}";
+                    Debug.Log($"Returning {gameObject.name} to the pool for {roomObjectType}");
+                    PoolLoader.Return(poolLoaderPath, gameObject);
+                    gameState.Remove(id);
+                }
             }
         }
     }
