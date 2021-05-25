@@ -1236,6 +1236,7 @@ GameObject:
   - component: {fileID: 9218302257170397443}
   - component: {fileID: 5099603326346038195}
   - component: {fileID: 5121883767539610980}
+  - component: {fileID: 2799929016382791282}
   m_Layer: 0
   m_Name: creep
   m_TagString: Untagged
@@ -1314,6 +1315,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rend: {fileID: 6962631114861333022}
+--- !u!114 &2799929016382791282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8180200459206781263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61022acc10f5a044083a51f00119695b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _badge: {fileID: 4099124959884727395}
+  _creepCore: {fileID: 4446368497938209821}
+  _rotationRoot: {fileID: 5178771384550497116}
+  _underLight: {fileID: 7390957952053060928}
 --- !u!1 &9095237282635000428
 GameObject:
   m_ObjectHideFlags: 0

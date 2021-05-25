@@ -1,3 +1,4 @@
+using Assets.Scripts.Common;
 using Assets.Scripts.ScreepsArenaApi.Responses;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,6 +37,9 @@ public class RoomObjectView : MonoBehaviour
         //RoomObject = roomObject;
         //transform.position = RoomObject.Position;
         //roomObject.OnShow += Show;
+
+        // TODO: We need a utility class to convert screeps cordinates to world cordinates.
+        transform.position = PosUtility.Convert(roomObject.x, roomObject.y, 100); // TODO: We need a reference to the RoomView to acquire the size / position within the room
 
         foreach (var component in components)
         {

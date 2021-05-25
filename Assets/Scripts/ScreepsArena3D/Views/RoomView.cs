@@ -67,8 +67,8 @@ namespace Assets.Scripts.ScreepsArena3D
                         view = go.GetComponent<RoomObjectView>();
                         if (view != null)
                         {
-                            view?.Init();
-                            view?.Load(roomObject);
+                            view.Init();
+                            view.Load(roomObject);
                         }
                         else
                         {
@@ -95,7 +95,11 @@ namespace Assets.Scripts.ScreepsArena3D
                         renderer.material.SetColor("_EmissionColor", color);
 
                     }
+                    
+                    //foreach (var action in roomObject.actionLog) actionlog seems to be a dictionary, it's either null or an empty object in the replay I have currently though.
+                    //{
 
+                    //}
                 }
 
                 if (roomObject.type == Constants.TypeConstructedWall)
@@ -111,6 +115,7 @@ namespace Assets.Scripts.ScreepsArena3D
                     renderer.material.SetColor("_BaseColor", color);
                 }
 
+                // TODO: move to flagview
                 if (roomObject.type == Constants.TypeFlag)
                 {
                     // TODO: this kind of logic belongs in "views" and theese views should be on the prefabs of the room objects
@@ -122,9 +127,6 @@ namespace Assets.Scripts.ScreepsArena3D
                     renderer.material.SetColor(ShaderKeys.FlagShader.PrimaryColor, color);
                     renderer.material.SetColor(ShaderKeys.FlagShader.SecondaryColor, color);
                 }
-
-                // TODO: We need a utility class to convert screeps cordinates to world cordinates.
-                go.transform.position = PosUtility.Convert(roomObject.x, roomObject.y, size);
             }
 
             // theese objects where not in this tick. does that mean they died?

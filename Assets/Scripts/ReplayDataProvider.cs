@@ -31,6 +31,7 @@ namespace Assets.Scripts
         private GameResponseGame GetGameFromCache()
         {
             string jsonFilePath = @$"{Application.persistentDataPath}\Replays\{arenaId}\{gameId}\game.json";
+            Debug.Log($"Getting game from cache: {jsonFilePath}");
             return ReadJsonFromFile<GameResponseGame>(jsonFilePath);
         }
 
