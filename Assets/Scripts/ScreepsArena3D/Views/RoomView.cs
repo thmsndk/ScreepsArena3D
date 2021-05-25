@@ -94,7 +94,7 @@ namespace Assets.Scripts.ScreepsArena3D
                         }
                         else
                         {
-                            Debug.LogWarning($"{go.name} prefab has no RoomObjectView component assigned.");
+                            Debug.LogError($"{go.name} prefab has no RoomObjectView component assigned.");
                         }
                     }
                     else

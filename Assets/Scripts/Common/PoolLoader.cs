@@ -59,6 +59,8 @@ namespace Assets.Scripts.Common
             var go = stack.Pop();
             
             go.transform.SetParent(parent);
+            
+            go.SetActive(true);
 
             return go;
         }
@@ -72,6 +74,8 @@ namespace Assets.Scripts.Common
 
             // This causes the SelectionPanel to go wonky. with negative "margins"
             //go.transform.SetParent(_parent);
+
+            go.SetActive(false);
 
             _pools[path].Push(go);
         }
