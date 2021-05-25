@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Common;
 using Assets.Scripts.ScreepsArena3D;
+using Assets.Scripts.ScreepsArena3D.Views.RoomObjects;
 using Assets.Scripts.ScreepsArenaApi.Responses;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace Screeps3D.RoomObjects.Views
         public Quaternion Rotation { get; private set; }
 
         public Vector3? ActionTarget { get; set; }
-
+        public RoomView _roomView { get; private set; }
 
         private void Awake()
         {
@@ -49,9 +50,16 @@ namespace Screeps3D.RoomObjects.Views
         //    }
         //}
 
+
         public void Load(ReplayChunkRoomObject roomObject)
         {
             _creep = roomObject;
+
+            if (_roomView.Badges.TryGetValue(roomObject.user, out var badge))
+            {
+                _badge.materials[0].SetTexture("EmissionTexture", badge);
+                _badge.materials[0].SetFloat("EmissionStrength", .1f);
+            }
 
             // TODO: owner, also set underlight color?
             //if (_creep?.Owner?.Badge == null)
@@ -183,9 +191,9 @@ namespace Screeps3D.RoomObjects.Views
             //}
             //else
             //{
-                // keep rotation towards move direction
-                _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, this.Rotation,
-                    Time.deltaTime * 5);
+            // keep rotation towards move direction
+            _rotationRoot.transform.rotation = Quaternion.Slerp(_rotationRoot.transform.rotation, this.Rotation,
+                Time.deltaTime * 5);
             //}
 
             // TODO: CreepActionView with a say subcomponent or something.
@@ -194,15 +202,16 @@ namespace Screeps3D.RoomObjects.Views
 
         }
 
-        public void Init()
+        public void Init(RoomView roomView)
         {
-            
+            this._roomView = roomView;
         }
 
         public void Unload()
         {
-            
+
         }
+
 
     }
 }

@@ -30,7 +30,9 @@ TODO:
   - [ ] data should be cached when fetched.
 - Use models from Screeps World 3D client
   - [ ] Creep
-    - [ ] Render body parts
+    - [x] Render body parts
+    - [x] Render badge / color
+      - [ ] Adjust colors to be "true" colors. the blue looks purple as an example.
     - [ ] Scale size depending on body parts
     - [ ] Render actions
       - [ ] attack
@@ -40,9 +42,10 @@ TODO:
       - [ ] rangedHeal
       - [ ] repair
       - [ ] build
-      - [ ] movement
+      - [x] movement
     - [ ] Render storage
   - [x] Tower
+    - [ ] Render Owner color
     - [ ] Render Actions
       - [ ] rangedAttack
       - [ ] rangedHeal
@@ -55,6 +58,7 @@ TODO:
   - [ ] Source
   - [ ] Resource
   - [x] Flag
+    - [ ] Render Owner color
     - [ ] Change direction of flag, or perhaps the model of flag to not require a direction.
 - UI
   - [ ] Selected RoomObject

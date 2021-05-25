@@ -1,5 +1,6 @@
 using Assets.Scripts.Common;
 using Assets.Scripts.ScreepsArena3D.Views;
+using Assets.Scripts.ScreepsArena3D.Views.RoomObjects;
 using Assets.Scripts.ScreepsArenaApi.Responses;
 using System;
 using System.Collections;
@@ -37,12 +38,33 @@ namespace Assets.Scripts.ScreepsArena3D
             // We should listen for terrain and tick data, perhaps we want to wire all this up in RoomManager instead.
         }
 
+        public Dictionary<string, Texture2D> Badges = new Dictionary<string, Texture2D>();
+
         internal void Tick(ReplayChunkTick tick)
         {
 
-
+            // updating users each tick seems silly.
             var users = tick.users; // TODO: handle more than two users in the future.
                                     //var me = tick.users.player1.username == gameResponse.game.users.Single(u => u._id == gameResponse.game.user).username
+
+            if (!Badges.ContainsKey(users.player1._id))
+            {
+                // TODO: handle multiple players in a smarter way. also this probably belogns as a lookup in the room. / entire game world.
+                var ownerColorHex = users.player1.color;
+                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                var badge = GeneratePlainBadge(color); // TODO: this badge should only be generated once 
+                Badges.Add(users.player1._id, badge);
+            }
+
+            if (!Badges.ContainsKey(users.player2._id))
+            {
+                // TODO: handle multiple players in a smarter way. also this probably belogns as a lookup in the room. / entire game world.
+                var ownerColorHex = users.player2.color;
+                ColorUtility.TryParseHtmlString(ownerColorHex, out var color);
+                var badge = GeneratePlainBadge(color); // TODO: this badge should only be generated once 
+                Badges.Add(users.player2._id, badge);
+            }
+
             var remainingObjects = gameState.Keys.ToList();
             foreach (var roomObject in tick.objects)
             {
@@ -67,7 +89,7 @@ namespace Assets.Scripts.ScreepsArena3D
                         view = go.GetComponent<RoomObjectView>();
                         if (view != null)
                         {
-                            view.Init();
+                            view.Init(this);
                             view.Load(roomObject);
                         }
                         else
@@ -145,6 +167,27 @@ namespace Assets.Scripts.ScreepsArena3D
                     gameState.Remove(id);
                 }
             }
+        }
+        private Texture2D GeneratePlainBadge(Color color = default(Color))
+        {
+            if (color == default(Color))
+            {
+                color = Color.red;
+            }
+
+            const int BADGE_SIZE = 250;
+
+            var texture = new Texture2D(BADGE_SIZE, BADGE_SIZE);
+
+            for (var x = 0; x < BADGE_SIZE; x++)
+            {
+                for (var y = 0; y < BADGE_SIZE; y++)
+                {
+                    texture.SetPixel(x, y, color);
+                }
+            }
+            texture.Apply();
+            return texture;
         }
     }
 }
