@@ -40,9 +40,9 @@ public class SteamScript : MonoBehaviour
     private ArenaLastGamesResponseGame latestGame;
     private GameResponse gameResponse;
 
-    
 
-    
+    public static string SteamTicket { get; set; }
+
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +50,12 @@ public class SteamScript : MonoBehaviour
         if (SteamManager.Initialized)
         {
             string name = SteamFriends.GetPersonaName();
-            Debug.Log(name);
+            Debug.Log("[Steam] Hello " + name);
+
+            // https://github.com/rlabrecque/Steamworks.NET-Test/blob/master/Assets/Scripts/SteamUserTest.cs
+            m_Ticket = new byte[1024];
+            m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket);
+            print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
         }
 
         
@@ -131,6 +136,8 @@ public class SteamScript : MonoBehaviour
             hexEncodedTicket += String.Format("{0:X2}", m_Ticket[i]);
         }
         Debug.Log("[STEAM] hexEncodedTicket == " + hexEncodedTicket); // Ensure it's not empty and looks "hexy"
+        
+        SteamTicket = hexEncodedTicket;
 
         //StartCoroutine(ScreepsArenaLogin(hexEncodedTicket));
 
@@ -182,28 +189,7 @@ public class SteamScript : MonoBehaviour
     }
      */
 
-    private IEnumerator ScreepsArenaArenaList()
-    {
-        Debug.Log("ScreepsArenaArenaList");
-        var www = UnityWebRequest.Get("https://arena.screeps.com/api/arena/list");
-
-        yield return www.SendWebRequest();
-
-        if (www.isNetworkError || www.isHttpError)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            // https://forum.unity.com/threads/json-from-webrequest.384974/
-            string response = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-            Debug.Log(response);
-            //string s = www.GetResponseHeader("set-cookie");
-            //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
-
-
-        }
-    }
+    
 
     void OnGameWebCallback(GameWebCallback_t pCallback)
     {

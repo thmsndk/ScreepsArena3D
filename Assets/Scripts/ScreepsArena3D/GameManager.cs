@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -103,6 +104,56 @@ public class GameManager : MonoBehaviour
 
         // TODO: register onTick for each room?
 
+        // TODO: figure out how we are gonna wire up authentication
+
+        StartCoroutine(DownloadLatestReplays("606873c364da921cb49855f7")); // Fetch replays from CTF
+    }
+
+    public IEnumerator DownloadLatestReplays(string arenaId, int replays = 5)
+    {
+        yield return new WaitForSecondsRealtime(10); // lets wait to make sure steam has launched
+
+        if (SteamScript.SteamTicket == null)
+        {
+            Debug.Log("We have no steam ticket, terminating replay download, SteamScript should be enabled to acquire a steam ticket.");
+            yield break;
+        }
+
+        var http = new Http();
+
+        AuthLoginResponse me = null;
+        yield return http.ScreepsArenaLogin(SteamScript.SteamTicket, authResponse => {
+            me = authResponse;
+        });
+
+        while (me == null)
+        {
+            Debug.Log("Waiting on arena login response");
+            yield return new WaitForSeconds(1f);
+        }
+
+        ArenaLastGamesResponse latestGames = null;
+        yield return http.GetLastGames(arenaId, latestGamesResponse =>
+        {
+            latestGames = latestGamesResponse;
+        });
+
+        while (latestGames == null)
+        {
+            Debug.Log("Waiting on latest game response");
+            yield return new WaitForSeconds(1f);
+        }
+
+        var go = new GameObject();
+
+        // TODO: iterate the latest X games and download them, we also need to wait untill it has finished downloading replay data before fetching the next one
+        // TODO: we need something that fetches the raw data from the api and persists that, perhaps stripping the "response" part of it when we fetch it from the cache
+        foreach (var game in latestGames.games.Take(replays))
+        {
+            var replayDataProvider = go.AddComponent<ReplayDataProvider>();
+            replayDataProvider.Init(http, game.arena, game.game._id);
+            yield return new WaitForSecondsRealtime(10);
+        }
     }
 
 

@@ -66,6 +66,30 @@ namespace Assets.Scripts.ScreepsArenaApi
             }
         }
 
+        //// TODO: get response
+        //private IEnumerator GetArenaList(Action<ArenaLastGamesResponse> callback)
+        //{
+        //    Debug.Log("ScreepsArenaArenaList");
+        //    var www = UnityWebRequest.Get("https://arena.screeps.com/api/arena/list");
+
+        //    yield return www.SendWebRequest();
+
+        //    if (www.isNetworkError || www.isHttpError)
+        //    {
+        //        Debug.Log(www.error);
+        //    }
+        //    else
+        //    {
+        //        // https://forum.unity.com/threads/json-from-webrequest.384974/
+        //        string response = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
+        //        Debug.Log(response);
+        //        //string s = www.GetResponseHeader("set-cookie");
+        //        //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
+        //        callback(JsonConvert.DeserializeObject<ArenaLastGamesResponse>(response));
+
+        //    }
+        //}
+
         public IEnumerator GetLastGames(string arenaId, Action<ArenaLastGamesResponse> callback)
         {
             Debug.Log("GetLastGames");
@@ -96,7 +120,7 @@ namespace Assets.Scripts.ScreepsArenaApi
             }
         }
 
-        public IEnumerator GetGame(string gameId, Action<GameResponse> callback)
+        public IEnumerator GetGame(string gameId, Action<GameResponse, string> callback)
         {
             Debug.Log("GetGame");
             var www = UnityWebRequest.Get($"https://arena.screeps.com/api/game/{gameId}");
@@ -116,7 +140,7 @@ namespace Assets.Scripts.ScreepsArenaApi
                 //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
 
                 // TODO: GET https://arena.screeps.com/api/game/60969f8c444a8bf84135abe3 HTTP/1.1
-                callback(JsonConvert.DeserializeObject<GameResponse>(response));
+                callback(JsonConvert.DeserializeObject<GameResponse>(response), response);
 
                 //// TODO: we now have a game, and we could start fetching replay data
                 ////StartCoroutine(FetchAllReplayData(gameResponse.game._id));
@@ -124,7 +148,7 @@ namespace Assets.Scripts.ScreepsArenaApi
             }
         }
 
-        public IEnumerator GetReplayChunk(string gameId, int chunkId, Action<ReplayChunkResponse> callback)
+        public IEnumerator GetReplayChunk(string gameId, int chunkId, Action<ReplayChunkResponse, string> callback)
         {
             Debug.Log($"GetReplayChunk {gameId} {chunkId}");
 
@@ -174,7 +198,7 @@ namespace Assets.Scripts.ScreepsArenaApi
                 //string s = www.GetResponseHeader("set-cookie");
                 //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
 
-                callback(new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(response) });
+                callback(new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(response) }, response);
             }
         }
         

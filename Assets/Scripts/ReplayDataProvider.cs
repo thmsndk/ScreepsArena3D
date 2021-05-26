@@ -25,29 +25,36 @@ namespace Assets.Scripts
 
         private void Start()
         {
-            
+
         }
 
         private GameResponseGame GetGameFromCache()
         {
             string jsonFilePath = @$"{Application.persistentDataPath}\Replays\{arenaId}\{gameId}\game.json";
-            Debug.Log($"Getting game from cache: {jsonFilePath}");
-            return ReadJsonFromFile<GameResponseGame>(jsonFilePath);
+            var gameResponse = ReadJsonFromFile<GameResponse>(jsonFilePath);
+            return gameResponse.game;
         }
 
         private ReplayChunkResponse GetReplayChunkFromCache(int chunk)
         {
-
             string jsonFilePath = @$"{Application.persistentDataPath}\Replays\{arenaId}\{gameId}\{chunk}.json";
-
-            return new ReplayChunkResponse { Ticks = ReadJsonFromFile<ReplayChunkTick[]>(jsonFilePath) };
+            var ticks = ReadJsonFromFile<ReplayChunkTick[]>(jsonFilePath);
+            if (ticks != null)
+            {
+                return new ReplayChunkResponse { Ticks = ticks };
+            }
+            return null;
         }
 
         public static T ReadJsonFromFile<T>(string filePath)
         {
-            // TODO: verify if file exists
-            var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<T>(json);
+            if (File.Exists(filePath))
+            {
+                var json = File.ReadAllText(filePath);
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+
+            return default;
         }
 
         internal ReplayChunkTick GetTick(int tick)
@@ -103,14 +110,16 @@ namespace Assets.Scripts
 
             GameResponseGame latestGame = GetGameFromCache();
 
-            // Get cached game
+            if (latestGame == null && http != null)
+            {
+                yield return http.GetGame(gameId, (gameResponse, json) =>
+                {
+                    latestGame = gameResponse.game;
 
-            // else query arena api
-            //yield return http.GetGame(gameId, gameResponse =>
-            //{
-            //    latestGame = gameResponse;
-            //    // TODO: add to cache
-            //});
+                    SaveGame(arenaId, gameId, json);
+
+                });
+            }
 
             while (latestGame == null)
             {
@@ -133,16 +142,16 @@ namespace Assets.Scripts
             {
                 int chunkId = GetChunkId(ticks, REPLAY_CHUNK_SIZE, neededChunks, chunk);
 
-                Debug.Log($"Cache: ReplayChunkResponse({chunkId})");
                 ReplayChunkResponse replayChunkResponse = GetReplayChunkFromCache(chunkId);
-                // Get cached chunk
 
-                // else querey api
-                //yield return http.GetReplayChunk(gameId, chunkId, chunkResponse =>
-                //{
-                //    replayChunkResponse = chunkResponse;
-                //    // TODO: add to cache / persist
-                //});
+                if (replayChunkResponse == null && http != null)
+                {
+                    yield return http.GetReplayChunk(gameId, chunkId, (chunkResponse, json) =>
+                    {
+                        replayChunkResponse = chunkResponse;
+                        SaveChunk(arenaId, gameId, chunkId, json);
+                    });
+                }
 
                 while (replayChunkResponse == null)
                 {
@@ -154,8 +163,6 @@ namespace Assets.Scripts
             }
 
             Debug.Log($"Done fetching replay data for {gameId}");
-
-            //StartCoroutine(PersistReplay(replay));
         }
 
         private static int GetChunkId(int ticks, int REPLAY_CHUNK_SIZE, double neededChunks, int chunk)
@@ -165,11 +172,47 @@ namespace Assets.Scripts
             // The last chunk is ticks % REPLAY_CHUNK_SIZE in size
             if (chunk == neededChunks)
             {
-                // 282 ticks, last chunk should be 282 not 300
-                chunkId -= REPLAY_CHUNK_SIZE - (ticks % REPLAY_CHUNK_SIZE);
+                // 282 ticks, last chunk should be 282 not 300, but it should only do it if there is a leftover.
+                var remainingTicks = ticks % REPLAY_CHUNK_SIZE;
+                if (remainingTicks > 0)
+                {
+                    chunkId -= REPLAY_CHUNK_SIZE - remainingTicks;
+                }
             }
 
             return chunkId;
+        }
+
+        private void SaveGame(string arenaId, string gameId, string json)
+        {
+            var basePath = $"{Application.persistentDataPath}/Replays/{arenaId}/{gameId}";
+            if (!Directory.Exists(basePath))
+            {
+                Directory.CreateDirectory(basePath);
+            }
+
+            string gameFilename = $"{basePath}/game.json";
+            using (StreamWriter file = File.CreateText(gameFilename))
+            {
+                file.Write(json);
+                Debug.Log("Saved: " + gameFilename);
+            }
+        }
+
+        private void SaveChunk(string arenaId, string gameId, int chunkId, string json)
+        {
+            var basePath = $"{Application.persistentDataPath}/Replays/{arenaId}/{gameId}";
+            if (!Directory.Exists(basePath))
+            {
+                Directory.CreateDirectory(basePath);
+            }
+
+            string chunkFilename = $"{basePath}/{chunkId}.json";
+            using (StreamWriter file = File.CreateText(chunkFilename))
+            {
+                file.Write(json);
+                Debug.Log("Saved: " + chunkFilename);
+            }
         }
 
         private IEnumerator PersistReplay(Assets.Scripts.ScreepsArenaApi.ReplayData replay)
