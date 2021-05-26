@@ -7,9 +7,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects
 {
+    [RequireComponent(typeof(ScaleVisibility))]
     public class RoomObjectView : MonoBehaviour
     {
         internal IObjectViewComponent[] components;
+        protected ScaleVisibility _vis;
 
         // Start is called before the first frame update
         void Start()
@@ -26,7 +28,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects
         internal void Init(RoomView roomView)
         {
             components = GetComponentsInChildren<IObjectViewComponent>();
-            //_vis = GetComponent<ScaleVisibility>();
+            _vis = GetComponent<ScaleVisibility>();
             //_vis.OnFinishedAnimation += OnFinishedAnimation;
 
             foreach (var component in components)

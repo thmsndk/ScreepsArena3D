@@ -9,16 +9,17 @@ namespace Screeps3D.RoomObjects.Views
     internal class CreepView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private Renderer _badge = default;
-        [SerializeField] private Renderer _creepCore = default;
+        //[SerializeField] private Renderer _creepCore = default;
         //[SerializeField] private Renderer _doritoCore = default;
         [SerializeField] private Transform _rotationRoot = default;
         [SerializeField] private Light _underLight = default;
+        [SerializeField] private ScaleVisibility _vis;
 
         private Quaternion _rotTarget;
         private Vector3 _posTarget;
         private Vector3 _posRef;
         private ReplayChunkRoomObject _creep; // TODO: ICreep or something
-        private bool _dead;
+        //private bool _dead;
 
         private Color32 _initialUnderlightColor;
 
@@ -81,12 +82,12 @@ namespace Screeps3D.RoomObjects.Views
 
         private void ScaleCreepSize()
         {
-            var percentage = _creep.body.Length / 50f;
-            _dead = false;
-            if (percentage == 0)
-            {
-                _dead = true;
-            }
+            var percentage = _creep.body.Length / 50f; // currently max body part size is 50, this might change? picking up body parts might extend your part numbers?
+            //_dead = false;
+            //if (percentage == 0)
+            //{
+            //    _dead = true;
+            //}
 
             var minVisibility = 0.001f; /*to keep it visible and selectable*/
             var maxVisibility = 1f;
@@ -101,8 +102,7 @@ namespace Screeps3D.RoomObjects.Views
             // Map range to visibility range
             var visibility = minVisibility + (maxVisibility - minVisibility) * ((current - minimum) / (maximum - minimum));
 
-            // TODO: scale creep
-            //_vis.SetVisibility(visibility, true);
+            _vis.SetVisibility(visibility, true);
         }
 
         public void Tick(ReplayChunkRoomObject data)
@@ -121,6 +121,7 @@ namespace Screeps3D.RoomObjects.Views
                 _posTarget = pos;
             }
 
+            // TODO: only scale creep size if hits was changed on a body part
             ScaleCreepSize();
 
             AssignBumpPosition(data);

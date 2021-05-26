@@ -33,7 +33,9 @@ TODO:
     - [x] Render body parts
     - [x] Render badge / color
       - [ ] Adjust colors to be "true" colors. the blue looks purple as an example.
-    - [ ] Scale size depending on body parts
+    - [x] Scale size depending on body parts
+      - [ ] Update hits of body parts each tick  
+        We might need to persist data of objects from tick 0, their initial data. else creeps would grow in sizes when moving backwards in a replay where a creep died in the current tick. but if a creep is spawned mid round, their initial tick is somewhere else.
     - [ ] Render actions
       - [ ] attack
       - [ ] rangedAttack
