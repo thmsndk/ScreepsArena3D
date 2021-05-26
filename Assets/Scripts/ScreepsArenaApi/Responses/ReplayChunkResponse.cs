@@ -46,7 +46,7 @@ namespace Assets.Scripts.ScreepsArenaApi.Responses
         public int storeCapacity;
         public ReplayChunkStore store;
         public string user;
-        public ReplayChunkActionLog actionLog;
+        public Dictionary<string, ReplayChunkAction> actionLog;
         public string _id;
     }
 
@@ -54,8 +54,10 @@ namespace Assets.Scripts.ScreepsArenaApi.Responses
     {
     }
 
-    public class ReplayChunkActionLog
+    public class ReplayChunkAction
     {
+        public int x;
+        public int y;
     }
 
     public class ReplayChunkBody

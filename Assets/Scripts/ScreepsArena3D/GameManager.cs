@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
             }
         };
 
-        replayDataProvider.Init(null, "606873c364da921cb49855f7", "609989f6891dffcde3f09554");
+        replayDataProvider.Init(null, "606873c364da921cb49855f7", "609c6a0645774afe1ffed184");
 
         // TODO: Global "tick" processor that ticks all rooms. If you set a specific tick, all rooms should be fed tick data for that specific tick.
         //renderTicks = RenderTicks(roomView, gameResponse, 0.5f);
@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
 
         // TODO: figure out how we are gonna wire up authentication
 
-        StartCoroutine(DownloadLatestReplays("606873c364da921cb49855f7")); // Fetch replays from CTF
+        //StartCoroutine(DownloadLatestReplays("606873c364da921cb49855f7")); // Fetch replays from CTF
     }
 
     public IEnumerator DownloadLatestReplays(string arenaId, int replays = 5)

@@ -117,11 +117,15 @@ namespace Assets.Scripts.ScreepsArena3D
                         renderer.material.SetColor("_EmissionColor", color);
 
                     }
-                    
-                    //foreach (var action in roomObject.actionLog) actionlog seems to be a dictionary, it's either null or an empty object in the replay I have currently though.
-                    //{
 
-                    //}
+                    if (roomObject.actionLog != null)
+                    {
+                        Debug.Log($"{go.name}");
+                        foreach (var action in roomObject.actionLog)
+                        {
+                            Debug.Log($"{action.Key} {action.Value.x} {action.Value.y}");
+                        }
+                    }
                 }
 
                 if (roomObject.type == Constants.TypeConstructedWall)
