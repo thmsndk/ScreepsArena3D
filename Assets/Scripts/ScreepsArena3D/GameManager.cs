@@ -19,6 +19,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private const string ArenaCaptureTheFlagBasicId = "606873c364da921cb49855f7";
+    private const string ArenaCaptureTheFlagAdvancedId = "608056514cb5ae2f245d57a0";
+    private const string ArenaSpawnAndSwampBasicId = "6096592a3c39e257e89fb27a";
+    private const string ArenaSpawnAndSwampAdvancedId = "6096caae3c39e257e89fb2a8";
 
     private static Transform shardContainer;
 
@@ -97,7 +100,7 @@ public class GameManager : MonoBehaviour
             }
         };
 
-        replayDataProvider.Init(null, "606873c364da921cb49855f7", "609c6a0645774afe1ffed184");
+        replayDataProvider.Init(null, ArenaCaptureTheFlagBasicId, "609c6a0645774afe1ffed184"); // Load a specific game from cached replays.
 
         // TODO: Global "tick" processor that ticks all rooms. If you set a specific tick, all rooms should be fed tick data for that specific tick.
         //renderTicks = RenderTicks(roomView, gameResponse, 0.5f);
