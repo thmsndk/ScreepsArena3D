@@ -198,7 +198,16 @@ namespace Assets.Scripts.ScreepsArenaApi
                 //string s = www.GetResponseHeader("set-cookie");
                 //sessionCookie = s.Substring(s.LastIndexOf("sessionID")).Split(';')[0];
 
-                callback(new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(response) }, response);
+                try
+                {
+                    callback(new ReplayChunkResponse { Ticks = JsonConvert.DeserializeObject<ReplayChunkTick[]>(response,new ReplayChunkRoomObjectConverter()) }, response);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogException(ex);
+                    Debug.LogError(response);
+                    throw;
+                }
             }
         }
 

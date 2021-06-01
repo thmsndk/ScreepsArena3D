@@ -32,13 +32,13 @@ namespace Assets.Scripts
         {
             string jsonFilePath = @$"{Application.persistentDataPath}\Replays\{arenaId}\{gameId}\game.json";
             var gameResponse = ReadJsonFromFile<GameResponse>(jsonFilePath);
-            return gameResponse.game;
+            return gameResponse?.game;
         }
 
         private ReplayChunkResponse GetReplayChunkFromCache(int chunk)
         {
             string jsonFilePath = @$"{Application.persistentDataPath}\Replays\{arenaId}\{gameId}\{chunk}.json";
-            var ticks = ReadJsonFromFile<ReplayChunkTick[]>(jsonFilePath);
+            var ticks = ReadJsonFromFile<ReplayChunkTick[]>(jsonFilePath,new ReplayChunkRoomObjectConverter()); // TODO: only initialize this once.
             if (ticks != null)
             {
                 return new ReplayChunkResponse { Ticks = ticks };
@@ -46,12 +46,12 @@ namespace Assets.Scripts
             return null;
         }
 
-        public static T ReadJsonFromFile<T>(string filePath)
+        public static T ReadJsonFromFile<T>(string filePath, params JsonConverter[] converters)
         {
             if (File.Exists(filePath))
             {
                 var json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<T>(json);
+                return JsonConvert.DeserializeObject<T>(json, converters);
             }
 
             return default;

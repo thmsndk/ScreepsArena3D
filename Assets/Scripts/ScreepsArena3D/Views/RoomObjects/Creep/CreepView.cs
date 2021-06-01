@@ -18,7 +18,7 @@ namespace Screeps3D.RoomObjects.Views
         private Quaternion _rotTarget;
         private Vector3 _posTarget;
         private Vector3 _posRef;
-        private ReplayChunkRoomObject _creep; // TODO: ICreep or something
+        private ReplayChunkRoomObjectCreep _creep; // TODO: ICreep or something
         //private bool _dead;
 
         private Color32 _initialUnderlightColor;
@@ -54,7 +54,7 @@ namespace Screeps3D.RoomObjects.Views
 
         public void Load(ReplayChunkRoomObject roomObject)
         {
-            _creep = roomObject;
+            _creep = roomObject as ReplayChunkRoomObjectCreep;
 
             if (_roomView.Badges.TryGetValue(roomObject.user, out var badge))
             {

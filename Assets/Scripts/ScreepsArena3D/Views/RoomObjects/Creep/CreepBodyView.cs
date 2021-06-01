@@ -7,7 +7,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
     public class CreepBodyView : MonoBehaviour, IObjectViewComponent
     {
         [SerializeField] private Renderer _rend = default;
-        private ReplayChunkRoomObject _creep; // TODO: interfaces
+        private ReplayChunkRoomObjectCreep _creep; // TODO: interfaces
         private Texture2D _texture;
 
         public void Init(RoomView roomView)
@@ -20,7 +20,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
             {
                 InitTexture();
             }
-            _creep = roomObject/* as Creep*/;
+            _creep = roomObject as ReplayChunkRoomObjectCreep;
             UpdateView(roomObject);
         }
 
@@ -37,7 +37,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
 
         public void Tick(ReplayChunkRoomObject data)
         {
-            var bodyObj = data.body; // Do we receive delta bodies?
+            var bodyObj = (data as ReplayChunkRoomObjectCreep)?.body; // Do we receive delta bodies?
             if (bodyObj == null)
                 return;
 

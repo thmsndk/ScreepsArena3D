@@ -39,8 +39,6 @@ namespace Assets.Scripts.ScreepsArenaApi.Responses
         public int y;
         public int hits;
         public int hitsMax;
-        public ReplayChunkBody[] body;
-        public bool spawning;
         public int ageTime;
         public int fatigue;
         public int storeCapacity;
@@ -48,6 +46,24 @@ namespace Assets.Scripts.ScreepsArenaApi.Responses
         public string user;
         public Dictionary<string, ReplayChunkAction> actionLog;
         public string _id;
+    }
+
+    public class ReplayChunkRoomObjectSpawn : ReplayChunkRoomObject
+    {
+        public ReplayChunkSpawning spawning;
+    }
+
+    public class ReplayChunkRoomObjectCreep : ReplayChunkRoomObject
+    {
+        public ReplayChunkBody[] body;
+        public bool spawning;
+    }
+
+    public class ReplayChunkSpawning
+    {
+        public int id { get; set; }
+        public int needTime { get; set; }
+        public int spawnTime { get; set; }
     }
 
     public class ReplayChunkStore
