@@ -15,7 +15,7 @@ namespace Assets.Scripts.ScreepsArena3D
         // object id and a reference to the game object.
         private Dictionary<string, GameObject> gameState = new Dictionary<string, GameObject>();
         private TerrainView terrainView;
-        private int size;
+        public int size;
 
         // Start is called before the first frame update
         void Start()
@@ -82,9 +82,7 @@ namespace Assets.Scripts.ScreepsArena3D
                     {
                         // An object has spawned...
                         go = PoolLoader.Load($"Prefabs/RoomObjects/{roomObject.type}", transform);
-                        go.name = $"{roomObject.type}-{roomObject._id}";
-                        // TODO: set color if we are moving back and forth in ticks and have creeps dying/being added
-                        gameState.Add(roomObject._id, go);
+                        // TODO: what if we have not implemented the type yet? => handle throw new Exception(string.Format("no resource found at path: {0}", path));
                         // TODO: we might want to persist a RoomObjectView instead of the gameobject, allowing us to call .Init/Load .Unload or .Tick
                         view = go.GetComponent<RoomObjectView>();
                         if (view != null)
@@ -95,7 +93,12 @@ namespace Assets.Scripts.ScreepsArena3D
                         else
                         {
                             Debug.LogError($"{go.name} prefab has no RoomObjectView component assigned.");
+                            // TODO: load not implemented prefab?
                         }
+
+                        go.name = $"{roomObject.type}-{roomObject._id}";
+                        // TODO: set color if we are moving back and forth in ticks and have creeps dying/being added
+                        gameState.Add(roomObject._id, go);
                     }
                     else
                     {
@@ -116,15 +119,6 @@ namespace Assets.Scripts.ScreepsArena3D
                         //renderer.material.SetColor("_BaseColor", color);
                         renderer.material.SetColor("_EmissionColor", color);
 
-                    }
-
-                    if (roomObject.actionLog != null)
-                    {
-                        Debug.Log($"{go.name}");
-                        foreach (var action in roomObject.actionLog)
-                        {
-                            Debug.Log($"{action.Key} {action.Value.x} {action.Value.y}");
-                        }
                     }
                 }
 

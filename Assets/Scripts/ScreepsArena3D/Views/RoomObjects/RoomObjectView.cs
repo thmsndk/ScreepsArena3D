@@ -58,7 +58,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects
         {
             foreach (var component in components)
             {
-                component.Load(roomObject);
+                component.Tick(roomObject);
             }
         }
         // In Screeps3D this is OnFinishedAnimation. i'm not exactly sure what animation it is that is finished. ScaleVisibility probably.

@@ -35,7 +35,8 @@ TODO:
       - [ ] Adjust colors to be "true" colors. the blue looks purple as an example.
     - [x] Scale size depending on body parts
       - [ ] Update hits of body parts each tick  
-        We might need to persist data of objects from tick 0, their initial data. else creeps would grow in sizes when moving backwards in a replay where a creep died in the current tick. but if a creep is spawned mid round, their initial tick is somewhere else.
+        We might need to persist data of objects from tick 0, their initial data. else creeps would grow in sizes when moving backwards in a replay where a creep died in the current tick. but if a creep is spawned mid round, their initial tick is somewhere else.  
+        In CTF you can pick up body parts making your body larger.
     - [ ] Render actions
       - [ ] attack
       - [ ] rangedAttack
@@ -56,9 +57,12 @@ TODO:
   - [ ] Spawn
     - [ ] Render storage
   - [ ] Wall
+    - [ ] wall height
   - [ ] Rampart
   - [ ] Source
   - [ ] Resource
+  - [ ] Container
+    - [ ] Render storage
   - [x] Flag
     - [ ] Render Owner color
     - [ ] Change direction of flag, or perhaps the model of flag to not require a direction.
@@ -75,3 +79,4 @@ Later / Ideas
 - Save replays as zip files once all data is acquired
 - Ability to extract zip files in memory 
 - Show multiple arenas at the same time?
+- CI https://isaacbroyles.com/gamedev/2020/07/04/unity-github-actions.html

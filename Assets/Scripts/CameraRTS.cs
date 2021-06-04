@@ -58,7 +58,7 @@ public class CameraRTS : MonoBehaviour
 
         if (x != 0 || y != 0)
         {
-            PanScreen(x, y);
+            //PanScreen(x, y);
         }
 
         if (z != 0)

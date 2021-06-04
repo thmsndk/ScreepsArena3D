@@ -57,8 +57,11 @@ namespace Assets.Scripts.Common
             }
 
             var go = stack.Pop();
-            
-            go.transform.SetParent(parent);
+
+            if (parent != null)
+            {
+                go.transform.SetParent(parent); 
+            }
             
             go.SetActive(true);
 
