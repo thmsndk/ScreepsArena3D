@@ -33,7 +33,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects
 
             foreach (var component in components)
             {
-                component.Init(roomView);
+                component.Init(roomView, this);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects
 
     internal interface IObjectViewComponent
     {
-        void Init(RoomView roomView);
+        void Init(RoomView roomView, RoomObjectView roomObjectView);
         void Load(ReplayChunkRoomObject roomObject); // TODO: interfaces?
 
         void Tick(ReplayChunkRoomObject data);

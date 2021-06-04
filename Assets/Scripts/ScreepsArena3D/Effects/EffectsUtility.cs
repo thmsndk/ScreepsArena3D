@@ -19,12 +19,12 @@ namespace Assets.Scripts.ScreepsArena3D.Effects
         //}        
 
         public static void Attack(Transform parent, Vector3 targetPos) {
-            var go = PoolLoader.Load(AttackEffect.PATH, null);
+            var go = PoolLoader.Load(AttackEffect.PATH, parent);
             var effect = go.GetComponent<AttackEffect>();
             effect.Load(targetPos);
         }
         public static void RangedAttackHit(Transform parent, Vector3 targetPos) {
-            var go = PoolLoader.Load(RangedAttackHitEffect.PATH, null);
+            var go = PoolLoader.Load(RangedAttackHitEffect.PATH, parent);
             var effect = go.GetComponent<RangedAttackHitEffect>();
             effect.Load(targetPos);
         }

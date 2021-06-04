@@ -18,6 +18,7 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
         private bool _actionEffect;
         private bool _animating;
         private RoomView _roomView;
+        private RoomObjectView _view;
 
         // possible actions from Delta JSONdata: 
         // attack               bump + sparks
@@ -34,9 +35,10 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
         // reserveController    bump + aura(violet)
         // say                  text
 
-        public void Init(RoomView roomView)
+        public void Init(RoomView roomView, RoomObjectView view)
         {
             _roomView = roomView;
+            _view = view;
         }
 
         public void Load(ReplayChunkRoomObject roomObject)
@@ -80,7 +82,6 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
                     case "attack":
                         _shouldBump = true;
                         doParticles(target, k, new Color32(255, 45, 0, 255));
-                        Debug.LogError($"{k} {action.x} {action.y} {target}");
                         break;
                     case "harvest":
                         _shouldBump = true;
@@ -190,11 +191,10 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
                     EffectsUtility.Attack(_roomView.transform, (_creepRoot.transform.position + target) / 2);
                     break;
                 case "heal":
-                    // no effect on healing creep, effect applied to healed creep
+                    // no effect on creep that heals, effect applied to healed creep
                     break;
                 case "healed":
-                    // TODO: handle heal effect
-                    //EffectsUtility.Heal(_creep as RoomObject);
+                    EffectsUtility.Heal(_view.transform);
                     break;
                 case "reserveController":
                     //EffectsUtility.Reserve(target);

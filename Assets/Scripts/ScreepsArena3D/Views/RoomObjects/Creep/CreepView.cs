@@ -30,6 +30,8 @@ namespace Screeps3D.RoomObjects.Views
         public Vector3? ActionTarget { get; set; }
         public RoomView _roomView { get; private set; }
 
+        private RoomObjectView _view;
+
         private void Awake()
         {
             _initialUnderlightColor = _underLight.color;
@@ -203,9 +205,10 @@ namespace Screeps3D.RoomObjects.Views
 
         }
 
-        public void Init(RoomView roomView)
+        public void Init(RoomView roomView, RoomObjectView view)
         {
-            this._roomView = roomView;
+            _roomView = roomView;
+            _view = view;
         }
 
         public void Unload()

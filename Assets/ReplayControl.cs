@@ -26,7 +26,7 @@ public class ReplayControl : MonoBehaviour
 
     private Coroutine tickIncrementer;
 
-    private float ticksPerScond = 5f;//0.5f;
+    private float ticksPerScond = 20f;//5f;//0.5f; // TODO: change tickspeed from UI
 
     private void OnEnable()
     {
@@ -43,6 +43,8 @@ public class ReplayControl : MonoBehaviour
         //slider.pageSize = 10;
         slider.value = 0;
         slider.highValue = 2000;
+        
+        // TODO: listen on slider value change, and tick if play is not pressed.
 
         //playPauseButton.clicked += () =>
         //{
@@ -104,7 +106,7 @@ public class ReplayControl : MonoBehaviour
     {
         while (slider.value < slider.highValue)
         {
-            Debug.Log("Ticking:  " + slider.value);
+            //Debug.Log("Ticking:  " + slider.value);
             OnTick?.Invoke((int)slider.value);
 
             yield return new WaitForSecondsRealtime(1 / ticksPerScond);

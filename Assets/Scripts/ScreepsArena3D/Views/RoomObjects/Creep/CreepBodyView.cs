@@ -10,8 +10,9 @@ namespace Assets.Scripts.ScreepsArena3D.Views.RoomObjects.Creep
         private ReplayChunkRoomObjectCreep _creep; // TODO: interfaces
         private Texture2D _texture;
 
-        public void Init(RoomView roomView)
+        public void Init(RoomView roomView, RoomObjectView view)
         {
+
         }
 
         public void Load(ReplayChunkRoomObject roomObject)
