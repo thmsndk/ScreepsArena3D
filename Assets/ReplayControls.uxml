@@ -1,11 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="bottom: auto; top: 85%; position: relative; justify-content: flex-start; align-items: center; flex-direction: column;">
+    <ui:VisualElement style="justify-content: space-between; flex-direction: column-reverse; align-items: center; height: 32px;">
         <ui:Label text="0/2000" display-tooltip-when-elided="true" name="TickLabel" style="align-items: center; justify-content: center; -unity-text-align: middle-center;" />
         <ui:Slider picking-mode="Ignore" value="0" high-value="100" name="TickSlider" style="flex-direction: column-reverse; justify-content: flex-start; align-items: center;" />
-        <ui:VisualElement name="Buttons" style="flex-direction: row; justify-content: center;">
-            <ui:Button text="&lt;" display-tooltip-when-elided="true" name="PrevButton" style="width: 147px;" />
-            <ui:Button text="Play/Pause" display-tooltip-when-elided="true" name="PlayPauseButton" focusable="false" />
-            <ui:Button text="&gt;" display-tooltip-when-elided="true" name="NextButton" style="width: 151px;" />
+    </ui:VisualElement>
+    <ui:VisualElement style="bottom: auto; top: 85%; position: relative; justify-content: flex-start; align-items: center; flex-direction: column;">
+        <ui:VisualElement>
+            <ui:VisualElement name="Buttons" style="flex-direction: row; justify-content: center;">
+                <ui:Button text="&lt;" display-tooltip-when-elided="true" name="PrevButton" style="width: 147px;" />
+                <ui:Button text="Play/Pause" display-tooltip-when-elided="true" name="PlayPauseButton" focusable="false" />
+                <ui:Button text="&gt;" display-tooltip-when-elided="true" name="NextButton" style="width: 151px;" />
+            </ui:VisualElement>
+            <ui:VisualElement />
+            <ui:Slider picking-mode="Ignore" label="Replay Speed [t/s]" value="1" high-value="20" name="ReplaySpeed" low-value="0.1" tooltip="Tick/s" direction="Horizontal" show-input-field="true" focusable="false" inverted="false" style="border-left-color: rgb(135, 135, 135); border-right-color: rgb(135, 135, 135); border-top-color: rgb(135, 135, 135); border-bottom-color: rgb(135, 135, 135); border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; -unity-font: resource(&apos;Fonts &amp; Materials/LiberationSans&apos;); height: auto; width: auto; align-items: stretch; justify-content: space-between; flex-direction: row-reverse; background-color: rgb(67, 58, 58); -unity-text-align: upper-right; margin-left: 3px; padding-left: 3px; border-top-left-radius: 4px; border-bottom-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; display: flex; overflow: visible; color: rgb(255, 255, 255); -unity-font-definition: resource(&apos;Fonts &amp; Materials/LiberationSans SDF&apos;); -unity-text-outline-width: 2px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
