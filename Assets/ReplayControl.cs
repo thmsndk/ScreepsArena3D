@@ -7,26 +7,31 @@ using UnityEngine.UIElements;
 public class ReplayControl : MonoBehaviour
 {
     private Label tickLabel;
+    private Slider tickSlider;
 
     private Button prevButton;
-    private Button playPauseButton;
-    private Button nextButton;
+    private Button prev10Button;
 
-    private Slider slider;
+    private Button playPauseButton;
+
+    private Button nextButton;
+    private Button next10Button;
+
+    private Slider replaySpeedSlider;
+    private Label replaySpeedLabel;
 
     public Action<int> OnPlayPause;
     public Action<int> OnPrevious;
     public Action<int> OnNext;
 
     public Action<int> OnSliderTick;
-
     public Action<int> OnTick;
 
     private bool isPlaying = false;
 
     private Coroutine tickIncrementer;
 
-    private float ticksPerScond = 20f;//5f;//0.5f; // TODO: change tickspeed from UI
+    private float ticksPerScond = 2f;//5f;//0.5f; // TODO: change tickspeed from UI
 
     private void OnEnable()
     {
@@ -34,16 +39,21 @@ public class ReplayControl : MonoBehaviour
         
         tickLabel= rootVisualElement.Q<Label>("TickLabel");
 
-        prevButton = rootVisualElement.Q<Button>("PrevButton");
-        playPauseButton = rootVisualElement.Q<Button>("PlayPauseButton");
-        playPauseButton.text = "Play";
 
-        nextButton = rootVisualElement.Q<Button>("NextButton");
-        slider = rootVisualElement.Q<Slider>("TickSlider");
+
+
+        tickSlider = rootVisualElement.Q<Slider>("TickSlider");
         //slider.pageSize = 10;
-        slider.value = 0;
-        slider.highValue = 2000;
-        
+        tickSlider.value = 0;
+        tickSlider.highValue = 2000; // can be 10k for advanced arenas, or less if replay ends earlier
+
+        replaySpeedSlider = rootVisualElement.Q<Slider>("ReplaySpeed");
+        replaySpeedSlider.lowValue = 0.5f;
+        replaySpeedSlider.value = ticksPerScond;
+
+        replaySpeedLabel = rootVisualElement.Q<Label>("ReplaySpeedLabel");
+        UpdateSpeedReplayLabel(ticksPerScond);
+
         // TODO: listen on slider value change, and tick if play is not pressed.
 
         //playPauseButton.clicked += () =>
@@ -52,22 +62,73 @@ public class ReplayControl : MonoBehaviour
         //    Debug.Log("Play/Pause was clicked");
         //};
 
+        prevButton = rootVisualElement.Q<Button>("PrevButton");
         prevButton.RegisterCallback<ClickEvent>(ev =>
         {
             Debug.Log("Prev was clicked");
-            slider.SetValueWithoutNotify(slider.value - 1);
-            UpdateTickLabel(slider.value);
-            OnPrevious?.Invoke((int)slider.value);
+            tickSlider.SetValueWithoutNotify(Math.Max(0, tickSlider.value - 1));
+            UpdateTickLabel(tickSlider.value);
+            OnPrevious?.Invoke((int)tickSlider.value);
 
-            Debug.Log("Tick:  " + slider.value);
-            OnTick?.Invoke((int)slider.value);
+            Debug.Log("Tick:  " + tickSlider.value);
+            OnTick?.Invoke((int)tickSlider.value);
+            if (isPlaying)
+            {
+                isPlaying = false;
+                playPauseButton.text = "Play";
+                StopCoroutine(tickIncrementer);
+            }
+
+        });
+        prev10Button = rootVisualElement.Q<Button>("Prev10Button");
+        prev10Button.RegisterCallback<ClickEvent>(ev =>
+        {
+            Debug.Log("Prev was clicked");
+            tickSlider.SetValueWithoutNotify(Math.Max(0, tickSlider.value - 10));
+            UpdateTickLabel(tickSlider.value);
+            OnPrevious?.Invoke((int)tickSlider.value);
+
+            Debug.Log("Tick:  " + tickSlider.value);
+            OnTick?.Invoke((int)tickSlider.value);
+            if (isPlaying)
+            {
+                isPlaying = false;
+                playPauseButton.text = "Play";
+                StopCoroutine(tickIncrementer);
+            }
 
         });
 
+        nextButton = rootVisualElement.Q<Button>("NextButton");
+        nextButton.RegisterCallback<ClickEvent>(ev =>
+        {
+            Debug.Log("Next was clicked");
+            tickSlider.SetValueWithoutNotify(Math.Min(tickSlider.highValue, tickSlider.value + 1));
+            UpdateTickLabel(tickSlider.value);
+            OnNext?.Invoke((int)tickSlider.value);
+
+            Debug.Log("Tick:  " + tickSlider.value);
+            OnTick?.Invoke((int)tickSlider.value);
+        });
+
+        next10Button = rootVisualElement.Q<Button>("Next10Button");
+        next10Button.RegisterCallback<ClickEvent>(ev =>
+        {
+            Debug.Log("Next was clicked");
+            tickSlider.SetValueWithoutNotify(Math.Min(tickSlider.highValue, tickSlider.value + 10));
+            UpdateTickLabel(tickSlider.value);
+            OnNext?.Invoke((int)tickSlider.value);
+
+            Debug.Log("Tick:  " + tickSlider.value);
+            OnTick?.Invoke((int)tickSlider.value);
+        });
+
+        playPauseButton = rootVisualElement.Q<Button>("PlayPauseButton");
+        playPauseButton.text = "Play";
         playPauseButton.RegisterCallback<ClickEvent>(ev =>
         {
             Debug.Log("Play/Pause was clicked");
-            OnPlayPause?.Invoke((int)slider.value);
+            OnPlayPause?.Invoke((int)tickSlider.value);
 
             if (!isPlaying)
             {
@@ -83,53 +144,55 @@ public class ReplayControl : MonoBehaviour
 
         });
 
-        nextButton.RegisterCallback<ClickEvent>(ev =>
+        tickSlider.RegisterCallback<ClickEvent>(ev =>
         {
-            Debug.Log("Next was clicked");
-            slider.SetValueWithoutNotify(slider.value + 1);
-            UpdateTickLabel(slider.value);
-            OnNext?.Invoke((int)slider.value);
-            
-            Debug.Log("Tick:  " + slider.value);
-            OnTick?.Invoke((int)slider.value);
+            Debug.Log("slider was clicked " + tickSlider.value + " " + tickSlider.pageSize);
+            OnSliderTick?.Invoke((int)tickSlider.value);
         });
 
-        slider.RegisterCallback<ClickEvent>(ev =>
-        {
-            Debug.Log("slider was clicked " + slider.value + " " + slider.pageSize);
-            OnSliderTick?.Invoke((int)slider.value);
 
-        });
+        replaySpeedSlider.RegisterValueChangedCallback(ev =>
+        {
+            Debug.Log("replaySpeed slider was clicked " + replaySpeedSlider.value);
+            ticksPerScond = replaySpeedSlider.value;
+            UpdateSpeedReplayLabel(ticksPerScond);
+        }); 
     }
 
     private IEnumerator AutoIncrementTick()
     {
-        while (slider.value < slider.highValue)
+        while (tickSlider.value < tickSlider.highValue)
         {
-            //Debug.Log("Ticking:  " + slider.value);
-            OnTick?.Invoke((int)slider.value);
+            Debug.Log("Ticking:  " + tickSlider.value);
+            Debug.Log("ReplaySpeed:  " + 1/replaySpeedSlider.value);
+            OnTick?.Invoke((int)tickSlider.value);
 
-            yield return new WaitForSecondsRealtime(1 / ticksPerScond);
-            slider.SetValueWithoutNotify(slider.value + 1);
-            UpdateTickLabel(slider.value);
+            yield return new WaitForSecondsRealtime(1 / replaySpeedSlider.value);
+            tickSlider.SetValueWithoutNotify(tickSlider.value + 1);
+            UpdateTickLabel(tickSlider.value);
         }
     }
 
     public void SetMaxTick(float tick)
     {
-        slider.highValue = tick;
-        UpdateTickLabel(slider.value);
+        tickSlider.highValue = tick;
+        UpdateTickLabel(tickSlider.value);
     }
 
     public void SetCurrentTick(float tick)
     {
-        slider.SetValueWithoutNotify(tick);
+        tickSlider.SetValueWithoutNotify(tick);
         UpdateTickLabel(tick);
     }
 
     private void UpdateTickLabel(float tick)
     {
-        tickLabel.text = $"{tick}/{slider.highValue}";
+        tickLabel.text = $"{tick}/{tickSlider.highValue}";
+    }
+
+    private void UpdateSpeedReplayLabel(float value)
+    {
+        replaySpeedLabel.text = $"Replay Speed: {value}[t/s]";
     }
 
     // Start is called before the first frame update
