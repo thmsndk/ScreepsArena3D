@@ -24,9 +24,9 @@ namespace Assets.Scripts.ScreepsArenaApi
         public IEnumerator ScreepsArenaLogin(string ticket, Action<AuthLoginResponse> callback = null)
         {
             Debug.Log("ScreepsArenaLogin");
-            Debug.Log(ticket);
+            //Debug.Log(ticket);
             var json = "{\"ticket\":\"" + ticket + "\"}";
-            Debug.Log(json);
+            //Debug.Log(json);
 
             var url = "https://arena.screeps.com/api/auth/login";
             var request = new UnityWebRequest(url, "POST");

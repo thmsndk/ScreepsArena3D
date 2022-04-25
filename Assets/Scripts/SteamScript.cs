@@ -34,8 +34,6 @@ public class SteamScript : MonoBehaviour
     private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
     private CallResult<StoreAuthURLResponse_t> OnStoreAuthURLResponseCallResult;
 
-    public GameObject creepSpherePrefb = default;
-
     private AuthLoginResponse loginResponse;
     private ArenaLastGamesResponseGame latestGame;
     private GameResponse gameResponse;
@@ -55,12 +53,8 @@ public class SteamScript : MonoBehaviour
             // https://github.com/rlabrecque/Steamworks.NET-Test/blob/master/Assets/Scripts/SteamUserTest.cs
             m_Ticket = new byte[1024];
             m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket);
-            print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
+            //print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
         }
-
-        
-
-
     }
     
 
@@ -68,36 +62,36 @@ public class SteamScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SteamAPICall_t handle = SteamUserStats.GetNumberOfCurrentPlayers();
-            m_NumberOfCurrentPlayers.Set(handle);
-            Debug.Log("Called GetNumberOfCurrentPlayers()");
-        }
+    //    // https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/QuickStartGuide.html
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        SteamAPICall_t handle = SteamUserStats.GetNumberOfCurrentPlayers();
+    //        m_NumberOfCurrentPlayers.Set(handle);
+    //        Debug.Log("Called GetNumberOfCurrentPlayers()");
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            // https://github.com/rlabrecque/Steamworks.NET-Test/blob/master/Assets/Scripts/SteamUserTest.cs
-            m_Ticket = new byte[1024];
-            m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket);
-            print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
+    //    if (Input.GetKeyDown(KeyCode.L))
+    //    {
+    //        // https://github.com/rlabrecque/Steamworks.NET-Test/blob/master/Assets/Scripts/SteamUserTest.cs
+    //        m_Ticket = new byte[1024];
+    //        m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket);
+    //        print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
 
-            /*
-             * if (m_HAuthTicket != HAuthTicket.Invalid && m_pcbTicket != 0) {
-					EBeginAuthSessionResult ret = SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID());
-					print("SteamUser.BeginAuthSession(m_Ticket, " + (int)m_pcbTicket + ", " + SteamUser.GetSteamID() + ") - " + ret);
-				}
-				else {
-					print("Call GetAuthSessionTicket first!");
-				}
-             */
-        }
+    //        /*
+    //         * if (m_HAuthTicket != HAuthTicket.Invalid && m_pcbTicket != 0) {
+				//	EBeginAuthSessionResult ret = SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID());
+				//	print("SteamUser.BeginAuthSession(m_Ticket, " + (int)m_pcbTicket + ", " + SteamUser.GetSteamID() + ") - " + ret);
+				//}
+				//else {
+				//	print("Call GetAuthSessionTicket first!");
+				//}
+    //         */
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            // This is the player logic after we have fetched the entire data structure of a replay, room objects should only represent their current state
-        }
+    //    if (Input.GetKeyDown(KeyCode.Return))
+    //    {
+    //        // This is the player logic after we have fetched the entire data structure of a replay, room objects should only represent their current state
+    //    }
     }
 
     private void OnEnable()
@@ -128,17 +122,18 @@ public class SteamScript : MonoBehaviour
     }
     void OnGetAuthSessionTicketResponse(GetAuthSessionTicketResponse_t pCallback)
     {
-        Debug.Log("[" + GetAuthSessionTicketResponse_t.k_iCallback + " - GetAuthSessionTicketResponse] - " + pCallback.m_hAuthTicket + " -- " + pCallback.m_eResult);
+        //Debug.Log("[" + GetAuthSessionTicketResponse_t.k_iCallback + " - GetAuthSessionTicketResponse] - " + pCallback.m_hAuthTicket + " -- " + pCallback.m_eResult);
         // Convert to hex/string for use with PlayFab
         string hexEncodedTicket = "";
         for (int i = 0; i < m_Ticket.Length; i++)
         {
             hexEncodedTicket += String.Format("{0:X2}", m_Ticket[i]);
         }
-        Debug.Log("[STEAM] hexEncodedTicket == " + hexEncodedTicket); // Ensure it's not empty and looks "hexy"
+        //Debug.Log("[STEAM] hexEncodedTicket == " + hexEncodedTicket); // Ensure it's not empty and looks "hexy"
         
         SteamTicket = hexEncodedTicket;
 
+        print("[Steam] ticket acquired");
         //StartCoroutine(ScreepsArenaLogin(hexEncodedTicket));
 
 
