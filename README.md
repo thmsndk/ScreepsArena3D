@@ -39,10 +39,10 @@ TODO:
         In CTF you can pick up body parts making your body larger.
     - [ ] Render actions
       - [ ] attack
-      - [ ] rangedAttack
+      - [x] rangedAttack
       - [ ] rangedMassAttack
-      - [ ] heal
-      - [ ] rangedHeal
+      - [x] heal
+      - [x] rangedHeal
       - [ ] repair
       - [ ] build
       - [x] movement
