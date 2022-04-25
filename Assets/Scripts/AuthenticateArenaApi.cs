@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.ScreepsArenaApi
 {
-    public class ArenaApi : MonoBehaviour
+    public class AuthenticateArenaApi : MonoBehaviour
     {
         private static AuthLoginResponse me = null;
         private Http http = new Http();
@@ -31,17 +32,20 @@ namespace Assets.Scripts.ScreepsArenaApi
             Debug.Log("Waiting on steam");
             yield return new WaitForSecondsRealtime(10); // lets wait to make sure steam has launched
 
-            while (SteamScript.SteamTicket == null)
+            while (AuthenticateSteam.SteamTicket == null)
             {
                 Debug.Log("We have no steam ticket, waiting...");
                 yield return new WaitForSecondsRealtime(10); // lets wait to make sure steam has launched
             }
             
-            yield return http.ScreepsArenaLogin(SteamScript.SteamTicket, authResponse =>
+            yield return http.ScreepsArenaLogin(AuthenticateSteam.SteamTicket, authResponse =>
             {
                 me = authResponse;
                 Debug.Log("Authenticated with arena, hello " + me.username);
             });
+
+            // Should probably live somewhere else
+            yield return SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
         }
     }
 }

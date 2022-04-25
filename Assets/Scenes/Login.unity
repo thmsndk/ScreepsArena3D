@@ -175,8 +175,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1296616327}
-  - component: {fileID: 1296616326}
   - component: {fileID: 1296616328}
+  - component: {fileID: 1296616326}
   m_Layer: 0
   m_Name: Authenticate
   m_TagString: Untagged
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1296616325}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9cbbec47c6375409dcb0612e9f8a2c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2893593e09d9af144bced7a19183d054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1296616327
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1296616325}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2893593e09d9af144bced7a19183d054, type: 3}
+  m_Script: {fileID: 11500000, guid: d72a1075f94b17a42bc3717555103261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1465662288

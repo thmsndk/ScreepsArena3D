@@ -15,7 +15,7 @@ using Assets.Scripts.ScreepsArenaApi.Responses;
 // TODO: RTS camera https://www.youtube.com/watch?v=PsAbHoB85hM
 
 // http://steamworks.github.io/gettingstarted/
-public class SteamScript : MonoBehaviour
+public class AuthenticateSteam : MonoBehaviour
 {
     
     protected Callback<GameOverlayActivated_t> m_GameOverlayActivated;

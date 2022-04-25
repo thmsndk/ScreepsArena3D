@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(10); // lets wait to make sure steam has launched
 
-        if (SteamScript.SteamTicket == null)
+        if (AuthenticateSteam.SteamTicket == null)
         {
             Debug.Log("We have no steam ticket, terminating replay download, SteamScript should be enabled to acquire a steam ticket.");
             yield break;
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
         var http = new Http();
 
         AuthLoginResponse me = null;
-        yield return http.ScreepsArenaLogin(SteamScript.SteamTicket, authResponse => {
+        yield return http.ScreepsArenaLogin(AuthenticateSteam.SteamTicket, authResponse => {
             me = authResponse;
         });
 
