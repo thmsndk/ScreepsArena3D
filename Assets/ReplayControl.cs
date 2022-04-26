@@ -51,7 +51,7 @@ public class ReplayControl : MonoBehaviour
         replaySpeedSlider.lowValue = 0.5f;
         replaySpeedSlider.value = ticksPerScond;
 
-        replaySpeedLabel = rootVisualElement.Q<Label>("ReplaySpeedLabel");
+        replaySpeedLabel = replaySpeedSlider.labelElement;
         UpdateSpeedReplayLabel(ticksPerScond);
 
         // TODO: listen on slider value change, and tick if play is not pressed.
@@ -81,7 +81,7 @@ public class ReplayControl : MonoBehaviour
 
         });
         prev10Button = rootVisualElement.Q<Button>("Prev10Button");
-        prev10Button.RegisterCallback<ClickEvent>(ev =>
+        prev10Button?.RegisterCallback<ClickEvent>(ev =>
         {
             Debug.Log("Prev was clicked");
             tickSlider.SetValueWithoutNotify(Math.Max(0, tickSlider.value - 10));
@@ -100,7 +100,7 @@ public class ReplayControl : MonoBehaviour
         });
 
         nextButton = rootVisualElement.Q<Button>("NextButton");
-        nextButton.RegisterCallback<ClickEvent>(ev =>
+        nextButton?.RegisterCallback<ClickEvent>(ev =>
         {
             Debug.Log("Next was clicked");
             tickSlider.SetValueWithoutNotify(Math.Min(tickSlider.highValue, tickSlider.value + 1));
@@ -112,7 +112,7 @@ public class ReplayControl : MonoBehaviour
         });
 
         next10Button = rootVisualElement.Q<Button>("Next10Button");
-        next10Button.RegisterCallback<ClickEvent>(ev =>
+        next10Button?.RegisterCallback<ClickEvent>(ev =>
         {
             Debug.Log("Next was clicked");
             tickSlider.SetValueWithoutNotify(Math.Min(tickSlider.highValue, tickSlider.value + 10));
