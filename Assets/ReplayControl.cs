@@ -51,7 +51,7 @@ public class ReplayControl : MonoBehaviour
         replaySpeedSlider.lowValue = 0.5f;
         replaySpeedSlider.value = ticksPerScond;
 
-        replaySpeedLabel = replaySpeedSlider.labelElement;
+        replaySpeedLabel = replaySpeedLabel.Q<Label>("ReplaySpeedLabel"); ;
         UpdateSpeedReplayLabel(ticksPerScond);
 
         // TODO: listen on slider value change, and tick if play is not pressed.
