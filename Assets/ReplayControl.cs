@@ -51,7 +51,7 @@ public class ReplayControl : MonoBehaviour
         replaySpeedSlider.lowValue = 0.5f;
         replaySpeedSlider.value = ticksPerScond;
 
-        replaySpeedLabel = replaySpeedLabel.Q<Label>("ReplaySpeedLabel"); ;
+        replaySpeedLabel = rootVisualElement.Q<Label>("ReplaySpeedLabel"); ;
         UpdateSpeedReplayLabel(ticksPerScond);
 
         // TODO: listen on slider value change, and tick if play is not pressed.
@@ -80,6 +80,7 @@ public class ReplayControl : MonoBehaviour
             }
 
         });
+        
         prev10Button = rootVisualElement.Q<Button>("Prev10Button");
         prev10Button?.RegisterCallback<ClickEvent>(ev =>
         {
@@ -135,7 +136,8 @@ public class ReplayControl : MonoBehaviour
                 playPauseButton.text = "Pause";
                 tickIncrementer = StartCoroutine(AutoIncrementTick());
             }
-            else {
+            else
+            {
                 playPauseButton.text = "Play";
                 StopCoroutine(tickIncrementer);
             }
@@ -143,11 +145,31 @@ public class ReplayControl : MonoBehaviour
             isPlaying = !isPlaying;
 
         });
+        playPauseButton.RegisterCallback<MouseEnterEvent>(ev =>
+        {
+            Debug.Log("Mouse enter Play/Pause");
+            playPauseButton.style.backgroundColor = new Color(0.349f, 0.555f, 0.349f);
 
-        tickSlider.RegisterCallback<ClickEvent>(ev =>
+        }); 
+        playPauseButton.RegisterCallback<MouseLeaveEvent>(ev =>
+        {
+            Debug.Log("Mouse leave Play/Pause");
+            playPauseButton.style.backgroundColor = new Color(0.349f, 0.349f, 0.349f);
+
+        });
+
+        //tickSlider.RegisterCallback<ClickEvent>(ev =>
+        //{
+        //    Debug.Log("slider was clicked " + tickSlider.value + " " + tickSlider.pageSize);
+        //    OnSliderTick?.Invoke((int)tickSlider.value);
+        //    UpdateTickLabel((int)tickSlider.value)
+        //});
+
+        tickSlider.RegisterValueChangedCallback(ev =>
         {
             Debug.Log("slider was clicked " + tickSlider.value + " " + tickSlider.pageSize);
             OnSliderTick?.Invoke((int)tickSlider.value);
+            UpdateTickLabel((int)tickSlider.value);
         });
 
 
